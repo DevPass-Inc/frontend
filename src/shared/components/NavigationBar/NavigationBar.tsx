@@ -21,8 +21,8 @@ function NavigationBar() {
         {/* 네비게이션 메뉴 */}
         <div className='flex h-10 gap-3.5'>
           <NavigationMenu link={'/dashboard'} title={'대시보드'} />
-          <NavigationMenu link={'/manage'} title={'경험 관리'} />
-          <NavigationMenu link={'/explore'} title={'기업 탐색'} />
+          <NavigationMenu link={'/experience'} title={'경험 관리'} />
+          <NavigationMenu link={'/companies'} title={'기업 탐색'} />
         </div>
       </div>
     </nav>
