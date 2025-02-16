@@ -22,7 +22,7 @@ function NavigationBar() {
         <div className='flex h-10 gap-3.5'>
           <NavigationMenu link={'/dashboard'} title={'대시보드'} />
           <NavigationMenu link={'/experience'} title={'경험 관리'} />
-          <NavigationMenu link={'/companies'} title={'기업 탐색'} />
+          <NavigationMenu link={'/company'} title={'기업 탐색'} />
         </div>
       </div>
     </nav>
