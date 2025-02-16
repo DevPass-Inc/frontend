@@ -1,1 +1,21 @@
 @import 'tailwindcss';
+
+@utility w-main {
+  @apply w-[1282px] max-w-[1282px] min-w-[1282px];
+}
+
+@utility h-nav {
+  @apply h-16 max-h-16 min-h-16;
+}
+
+@utility border-main {
+  @apply border-[#E5E7EB];
+}
+
+@utility text-main-gray {
+  @apply text-[#4B5563];
+}
+
+@utility h-main {
+  @apply h-[calc(100vh-4rem)];
+}
