@@ -1,4 +1,5 @@
 import MainNavItem from '../../shared/components/MainNavItem';
+import SearchBar from '../../shared/components/SearchBar';
 
 // COLORS 정의
 const COLORS = {
@@ -43,6 +44,15 @@ function Main() {
             {MAIN_NAV_ITEMS.map((item, idx) => (
               <MainNavItem key={`${item.title}-${idx}`} {...item} />
             ))}
+          </div>
+
+          {/* 검색바 */}
+          <div className='mt-11'>
+            <SearchBar
+              width={485}
+              height={60}
+              placeholder={'검색어를 입력하세요.'}
+            />
           </div>
         </div>
       </div>
