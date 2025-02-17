@@ -4,16 +4,12 @@ import devPassLogo from '/images/svg/devpass_logo.svg';
 
 function NavigationBar() {
   return (
-    <nav className='border-main h-nav flex w-full justify-center border-b border-solid bg-white'>
+    <nav className='border-nav h-nav flex w-full justify-center border-b border-solid bg-white'>
       {/* 네비게이션 바 */}
       <div className='w-main flex h-full items-center justify-between'>
         {/* 로고 */}
         <Link to={'/'} className='flex cursor-pointer items-center gap-2'>
-          <img
-            src={devPassLogo}
-            alt='DevPass logo'
-            className='h-6 w-6'
-          />
+          <img src={devPassLogo} alt='DevPass logo' className='h-6 w-6' />
           <h1 className='text-lg leading-6 font-semibold text-black'>
             DevPass
           </h1>

@@ -1,21 +1,43 @@
 @import 'tailwindcss';
 
+/* === WIDTH === */
 @utility w-main {
   @apply w-[1282px] max-w-[1282px] min-w-[1282px];
 }
 
+/* === HEIGHT === */
+@utility h-main {
+  @apply h-[calc(100vh-4rem)];
+}
 @utility h-nav {
   @apply h-16 max-h-16 min-h-16;
 }
 
+/* === BACKGROUND COLOR === */
+@utility bg-main {
+  @apply bg-[#F9FAFB];
+}
+
+/* === BORDER COLOR === */
 @utility border-main {
+  @apply border-[#F4FAFB];
+}
+@utility border-nav {
   @apply border-[#E5E7EB];
 }
 
+/* === TEXT COLOR === */
+@utility text-main {
+  @apply text-[#1F2937];
+}
 @utility text-main-gray {
   @apply text-[#4B5563];
 }
+@utility text-main-gray-light {
+  @apply text-[#6B7280];
+}
 
-@utility h-main {
-  @apply h-[calc(100vh-4rem)];
+/* === BOX SHADOW === */
+@utility shadow-main {
+  box-shadow: 0px 0px 0px 0.05px #00000040;
 }
