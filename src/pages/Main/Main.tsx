@@ -1,3 +1,4 @@
+import JobPost from '../../shared/components/JobPost';
 import MainNavItem from '../../shared/components/MainNavItem';
 import SearchBar from '../../shared/components/SearchBar';
 
@@ -38,7 +39,7 @@ function Main() {
 
       {/* 메인 컨텐츠 */}
       <div className='w-main'>
-        <div className='mt-10.25 flex w-full flex-col items-center gap-11.75'>
+        <div className='mt-10.25 mb-16.5 flex w-full flex-col items-center gap-11.75'>
           {/* 메뉴 */}
           <div className='flex h-27.5 gap-10'>
             {MAIN_NAV_ITEMS.map((item, idx) => (
@@ -53,6 +54,21 @@ function Main() {
               height={60}
               placeholder={'검색어를 입력하세요.'}
             />
+          </div>
+
+          {/* 기업 공고 그리드 */}
+          <div className='mt-9.75 flex flex-col items-center gap-9.75'>
+            <div className='grid h-105.75 w-250 grid-cols-2 grid-rows-3'>
+              <JobPost />
+              <JobPost />
+              <JobPost />
+              <JobPost />
+              <JobPost />
+              <JobPost />
+            </div>
+            <button className='font-scd text-main-blue border-main-blue h-9.25 w-35.5 cursor-pointer rounded-[18px] border-2 border-solid text-sm font-medium'>
+              더 많은 기업 보기
+            </button>
           </div>
         </div>
       </div>

@@ -5,7 +5,7 @@ function Layout() {
   return (
     <div className='bg-main flex h-full w-full flex-col'>
       <NavigationBar />
-      <main className='h-main flex w-full justify-center'>
+      <main className='min-h-main flex w-full justify-center'>
         <Outlet />
       </main>
     </div>
