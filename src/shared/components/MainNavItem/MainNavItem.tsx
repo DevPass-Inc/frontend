@@ -4,6 +4,7 @@ import blueDoc from '/images/svg/doc/blue_doc.svg';
 import greenDoc from '/images/svg/doc/green_doc.svg';
 import purpleDoc from '/images/svg/doc/purple_doc.svg';
 
+// props 타입
 interface MainNavItemProps {
   link: string;
   color: string;
@@ -14,8 +15,9 @@ interface MainNavItemProps {
 function MainNavItem(props: MainNavItemProps) {
   const { link, color, title, desc } = props;
 
-  const [docIcon, setDocIcon] = useState<string>('');
+  const [docIcon, setDocIcon] = useState<string>(''); // 아이콘
 
+  // props color에 따라 아이콘 변경
   useEffect(() => {
     if (color === '#DBEAFE') {
       setDocIcon(blueDoc);

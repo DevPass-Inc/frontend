@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import NavigationMenu from '../NavigationMenu';
-import devPassLogo from '/images/svg/devpass_logo.svg';
+import devPassLogo from '/images/svg/logo/devpass_logo.svg';
 
 function NavigationBar() {
   return (

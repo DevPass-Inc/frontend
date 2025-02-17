@@ -1,21 +1,29 @@
 import MainNavItem from '../../shared/components/MainNavItem';
 
+// COLORS 정의
+const COLORS = {
+  blue: '#DBEAFE',
+  green: '#D1FAE5',
+  purple: '#E9D5FF',
+} as const;
+
+// MainNavItem props 데이터
 const MAIN_NAV_ITEMS = [
   {
     link: '/exp/new',
-    color: '#DBEAFE',
+    color: COLORS.blue,
     title: '경험 등록',
     desc: '프로젝트, 인턴십 등의 개발 경험을 등록해 관리하세요.',
   },
   {
     link: '/resume/new',
-    color: '#D1FAE5',
+    color: COLORS.green,
     title: '이력서 생성',
     desc: '등록된 경험을 바탕으로 맞춤형 이력서를 생성하세요.',
   },
   {
     link: '/company/matching',
-    color: '#E9D5FF',
+    color: COLORS.purple,
     title: '기업 매칭',
     desc: '이력서를 기반으로 최적의 기업을 추천받으세요.',
   },
