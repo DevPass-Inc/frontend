@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import NavigationMenu from '../NavigationMenu';
+import devPassLogo from '/images/svg/devpass_logo.svg';
 
 function NavigationBar() {
   return (
@@ -9,7 +10,7 @@ function NavigationBar() {
         {/* 로고 */}
         <Link to={'/'} className='flex cursor-pointer items-center gap-2'>
           <img
-            src='/images/svg/devpass_logo.svg'
+            src={devPassLogo}
             alt='DevPass logo'
             className='h-6 w-6'
           />
