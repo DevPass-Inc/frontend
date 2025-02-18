@@ -86,20 +86,30 @@ function ExperienceNew() {
               />
             </div>
 
-            {/* 왼쪽에서 경험을 선택하거나 새로 추가해주세요. */}
-            {/* <ExperienceNewEmptyAlert /> */}
+            {/* 선택한 경험이 없는 경우 */}
+            {!selectedExp && (
+              <>
+                {/* 왼쪽에서 경험을 선택하거나 새로 추가해주세요. */}
+                <ExperienceNewEmptyAlert />
+              </>
+            )}
 
-            {/* 경험 추가 폼 */}
-            <div className='relative flex min-h-179.5 flex-1 flex-col items-center justify-start rounded-tr-[10px] rounded-b-[10px] border-2 border-solid border-[#DFDFDF] bg-white px-10 py-13'>
-              {/* 탭 선택 */}
-              <ExperienceCurrentTab
-                currentTab={currentTab}
-                handleTabClick={handleTabClick}
-              />
+            {/* 선택한 경험이 있는 경우 */}
+            {selectedExp && (
+              <>
+                {/* 경험 추가 폼 */}
+                <div className='relative flex min-h-179.5 flex-1 flex-col items-center justify-start rounded-tr-[10px] rounded-b-[10px] border-2 border-solid border-[#DFDFDF] bg-white px-10 py-13'>
+                  {/* 탭 선택 */}
+                  <ExperienceCurrentTab
+                    currentTab={currentTab}
+                    handleTabClick={handleTabClick}
+                  />
 
-              {/* 내부 폼 */}
-              <ExperienceForm currentTab={currentTab} />
-            </div>
+                  {/* 내부 폼 */}
+                  <ExperienceForm currentTab={currentTab} />
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
