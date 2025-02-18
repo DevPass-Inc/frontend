@@ -1,4 +1,5 @@
-import plusIcon from '/images/svg/icons/plus.svg';
+import ExperienceItem from '../../shared/components/ExperienceItem';
+import ExperienceNewEmptyAlert from '../../shared/components/ExperienceNewEmptyAlert';
 
 function ExperienceNew() {
   return (
@@ -17,7 +18,7 @@ function ExperienceNew() {
 
           {/* 경험 추가 */}
           <div className='flex w-full items-start gap-9.25'>
-            {/* 경험 목록 */}
+            {/* 경험 목록 및 추가 */}
             <div className='flex min-h-40 min-w-101 flex-col gap-7 rounded-[10px] border border-solid border-[#DFDFDF] bg-white px-7 py-8.25'>
               <h3 className='text-2xl leading-[29.05px] font-semibold'>
                 개발 경험
@@ -57,9 +58,13 @@ function ExperienceNew() {
                   새로운 경험 추가
                 </span>
               </button>
+
+              {/* 경험 목록 */}
+              <ExperienceItem />
             </div>
 
-            {/* 경험 입력 폼 */}
+            {/* 왼쪽에서 경험을 선택하거나 새로 추가해주세요. */}
+            <ExperienceNewEmptyAlert />
           </div>
         </div>
       </div>
