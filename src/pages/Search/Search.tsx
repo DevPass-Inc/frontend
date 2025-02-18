@@ -1,5 +1,6 @@
 import Dropdown from '../../shared/components/Dropdown';
 import JobPost from '../../shared/components/JobPost';
+import Pagination from '../../shared/components/Pagination';
 import SearchItem from '../../shared/components/SearchItem';
 
 function Search() {
@@ -45,6 +46,11 @@ function Search() {
             <JobPost />
             <JobPost />
           </div>
+        </div>
+
+        {/* 페이지네이션 */}
+        <div className='mt-10'>
+          <Pagination />
         </div>
       </div>
     </div>
