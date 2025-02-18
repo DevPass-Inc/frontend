@@ -1,7 +1,10 @@
+import { useState } from 'react';
 import ExperienceItem from '../../shared/components/ExperienceItem';
 import ExperienceNewEmptyAlert from '../../shared/components/ExperienceNewEmptyAlert';
 
 function ExperienceNew() {
+  const [selectedExp, setSelectedExp] = useState<string | null>(null); // 선택된 경험
+
   return (
     <div className='w-main overflow-hidden'>
       <div className='mt-9.5'>
@@ -41,16 +44,16 @@ function ExperienceNew() {
                   <path
                     d='M3.41699 7H11.5837'
                     stroke='currentColor'
-                    stroke-width='2'
-                    stroke-linecap='round'
-                    stroke-linejoin='round'
+                    strokeWidth='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
                   />
                   <path
                     d='M7.5 2.9165V11.0832'
                     stroke='currentColor'
-                    stroke-width='2'
-                    stroke-linecap='round'
-                    stroke-linejoin='round'
+                    strokeWidth='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
                   />
                 </svg>
 
@@ -60,7 +63,18 @@ function ExperienceNew() {
               </button>
 
               {/* 경험 목록 */}
-              <ExperienceItem />
+              <ExperienceItem
+                title={'경험 1'}
+                desc={'경험 설명'}
+                isSelected={selectedExp === '경험 1'}
+                onClick={() => setSelectedExp('경험 1')}
+              />
+              <ExperienceItem
+                title={'경험 2'}
+                desc={'경험 설명'}
+                isSelected={selectedExp === '경험 2'}
+                onClick={() => setSelectedExp('경험 2')}
+              />
             </div>
 
             {/* 왼쪽에서 경험을 선택하거나 새로 추가해주세요. */}
