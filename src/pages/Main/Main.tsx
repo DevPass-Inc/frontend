@@ -33,7 +33,7 @@ const MAIN_NAV_ITEMS = [
 
 function Main() {
   return (
-    <div className='flex w-full flex-col items-center'>
+    <div className='flex w-full flex-col items-center overflow-hidden'>
       {/* 배너 */}
       <div className='h-100.25 w-full bg-black'></div>
 

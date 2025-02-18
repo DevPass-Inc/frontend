@@ -2,7 +2,7 @@
 
 /* === WIDTH === */
 @utility w-main {
-  @apply w-[1282px] max-w-[1282px] min-w-[1282px];
+  @apply w-[1282px] max-w-[1282px];
 }
 
 /* === HEIGHT === */
