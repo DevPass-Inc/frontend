@@ -54,10 +54,10 @@
 
 /* === FONT === */
 @utility font-scd {
-  font-family: 'SCoreDream';
+  font-family: 'SCoreDream', sans-serif;
 }
 @utility font-noto {
-  font-family: 'Noto Sans KR';
+  font-family: 'Noto Sans KR', sans-serif;
 }
 
 /* === FONT SIZE === */
