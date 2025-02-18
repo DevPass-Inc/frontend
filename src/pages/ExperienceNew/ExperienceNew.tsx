@@ -1,9 +1,17 @@
 import { useState } from 'react';
 import ExperienceItem from '../../shared/components/ExperienceItem';
 import ExperienceNewEmptyAlert from '../../shared/components/ExperienceNewEmptyAlert';
+import ExperienceCurrentTab from '../../components/ExperienceCurrentTab';
 
 function ExperienceNew() {
   const [selectedExp, setSelectedExp] = useState<string | null>(null); // 선택된 경험
+  const [currentTab, setCurrentTab] = useState<'project' | 'stack' | 'intern'>(
+    'project'
+  ); // 현재 탭
+
+  const handleTabClick = (tab: 'project' | 'stack' | 'intern') => {
+    setCurrentTab(tab);
+  };
 
   return (
     <div className='w-main overflow-hidden'>
@@ -78,7 +86,16 @@ function ExperienceNew() {
             </div>
 
             {/* 왼쪽에서 경험을 선택하거나 새로 추가해주세요. */}
-            <ExperienceNewEmptyAlert />
+            {/* <ExperienceNewEmptyAlert /> */}
+
+            {/* 경험 추가 폼 */}
+            <div className='relative flex min-h-179.5 flex-1 items-center justify-center rounded-tr-[10px] rounded-b-[10px] border-2 border-solid border-[#DFDFDF] bg-white px-5'>
+              {/* 탭 선택 */}
+              <ExperienceCurrentTab
+                currentTab={currentTab}
+                handleTabClick={handleTabClick}
+              />
+            </div>
           </div>
         </div>
       </div>
