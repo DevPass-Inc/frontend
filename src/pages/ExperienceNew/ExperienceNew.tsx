@@ -2,6 +2,7 @@ import { useState } from 'react';
 import ExperienceItem from '../../shared/components/ExperienceItem';
 import ExperienceNewEmptyAlert from '../../shared/components/ExperienceNewEmptyAlert';
 import ExperienceCurrentTab from '../../components/ExperienceCurrentTab';
+import ExperienceForm from '../../components/ExperienceForm';
 
 function ExperienceNew() {
   const [selectedExp, setSelectedExp] = useState<string | null>(null); // 선택된 경험
@@ -15,7 +16,7 @@ function ExperienceNew() {
 
   return (
     <div className='w-main overflow-hidden'>
-      <div className='mt-9.5'>
+      <div className='mt-9.5 mb-15.5'>
         <div className='flex w-full flex-col gap-9.25'>
           {/* 타이틀 */}
           <div className='flex flex-col gap-1.75'>
@@ -89,12 +90,15 @@ function ExperienceNew() {
             {/* <ExperienceNewEmptyAlert /> */}
 
             {/* 경험 추가 폼 */}
-            <div className='relative flex min-h-179.5 flex-1 items-center justify-center rounded-tr-[10px] rounded-b-[10px] border-2 border-solid border-[#DFDFDF] bg-white px-5'>
+            <div className='relative flex min-h-179.5 flex-1 flex-col items-center justify-start rounded-tr-[10px] rounded-b-[10px] border-2 border-solid border-[#DFDFDF] bg-white px-10 py-13'>
               {/* 탭 선택 */}
               <ExperienceCurrentTab
                 currentTab={currentTab}
                 handleTabClick={handleTabClick}
               />
+
+              {/* 내부 폼 */}
+              <ExperienceForm currentTab={currentTab} />
             </div>
           </div>
         </div>
