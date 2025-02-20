@@ -1,9 +1,29 @@
-function ResumePreviewItem() {
+import checkBlueIcon from '/images/svg/icons/check_blue.svg';
+
+interface ResumePreviewItemProps {
+  index: number;
+  selectedResume: number | null;
+  handleSelectResume: (index: number) => void;
+}
+
+function ResumePreviewItem(props: ResumePreviewItemProps) {
+  const { index, selectedResume, handleSelectResume } = props;
+
   return (
     <button
       type='button'
-      className='flex h-65 w-130 flex-col items-start rounded-[10px] border-2 border-solid border-[#DFDFDF] bg-white px-8 pt-5.75 pb-5'
+      className={`${selectedResume === index ? 'border-[#3B81F6]' : 'border-[#DFDFDF] hover:bg-cyan-50'} relative flex h-65 w-130 cursor-pointer flex-col items-start rounded-[10px] border-2 border-solid bg-white px-8 pt-5.75 pb-5 transition-all duration-200`}
+      onClick={() => handleSelectResume(index)}
     >
+      {/* 체크 아이콘 (선택됨) */}
+      {selectedResume === index && (
+        <img
+          src={checkBlueIcon}
+          alt='Selected Resume'
+          className='absolute top-7.25 right-6.25 w-4'
+        />
+      )}
+
       {/* 이름 & 직무 */}
       <div className='flex flex-col items-start gap-0.5'>
         <h3 className='text-xl leading-[24.2px] font-bold text-[#111827]'>

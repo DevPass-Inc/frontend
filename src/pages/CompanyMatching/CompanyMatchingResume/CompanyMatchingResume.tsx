@@ -1,6 +1,13 @@
+import { useState } from 'react';
 import ResumePreviewItem from '../../../components/ResumePreviewItem';
 
 function CompanyMatchingResume() {
+  const [selectedResume, setSelectedResume] = useState<number | null>(null);
+
+  const handleSelectResume = (index: number) => {
+    setSelectedResume(index);
+  };
+
   return (
     <div className='w-main overflow-hidden'>
       <div className='mt-12.5 mb-29'>
@@ -17,11 +24,23 @@ function CompanyMatchingResume() {
 
           {/* 이력서 리스트 */}
           <div className='flex w-full flex-wrap justify-center gap-5'>
-            <ResumePreviewItem />
-            <ResumePreviewItem />
-            <ResumePreviewItem />
-            <ResumePreviewItem />
+            {Array.from({ length: 4 }).map((_, index) => (
+              <ResumePreviewItem
+                key={`resume-preview-${index}`}
+                index={index}
+                selectedResume={selectedResume}
+                handleSelectResume={handleSelectResume}
+              />
+            ))}
           </div>
+
+          {/* 기업 매칭하기 버튼 */}
+          <button
+            type='button'
+            className='flex h-11 w-35 cursor-pointer items-center justify-center rounded bg-[#0043CE] font-semibold text-white'
+          >
+            기업 매칭하기
+          </button>
         </div>
       </div>
     </div>
