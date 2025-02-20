@@ -20,6 +20,9 @@
 @utility bg-main {
   @apply bg-[#F9FAFB];
 }
+@utility bg-main-blue {
+  @apply bg-[#2563EB];
+}
 
 /* === BORDER COLOR === */
 @utility border-main {
@@ -54,10 +57,10 @@
 
 /* === FONT === */
 @utility font-scd {
-  font-family: 'SCoreDream';
+  font-family: 'SCoreDream', sans-serif;
 }
 @utility font-noto {
-  font-family: 'Noto Sans KR';
+  font-family: 'Noto Sans KR', sans-serif;
 }
 
 /* === FONT SIZE === */
