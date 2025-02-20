@@ -1,11 +1,20 @@
 import { useState } from 'react';
 import ResumePreviewItem from '../../../components/ResumePreviewItem';
+import { useNavigate } from 'react-router-dom';
 
 function CompanyMatchingResume() {
-  const [selectedResume, setSelectedResume] = useState<number | null>(null);
+  const navigate = useNavigate();
 
+  const [selectedResume, setSelectedResume] = useState<number | null>(null); // 선택된 이력서 인덱스
+
+  // 이력서 선택 핸들러
   const handleSelectResume = (index: number) => {
     setSelectedResume(index);
+  };
+
+  // 기업 매칭하기 버튼 클릭 핸들러
+  const handleCompanyMatching = () => {
+    navigate('/company/matching/result');
   };
 
   return (
@@ -38,6 +47,7 @@ function CompanyMatchingResume() {
           <button
             type='button'
             className='flex h-11 w-35 cursor-pointer items-center justify-center rounded bg-[#0043CE] font-semibold text-white'
+            onClick={handleCompanyMatching}
           >
             기업 매칭하기
           </button>

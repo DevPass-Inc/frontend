@@ -7,6 +7,7 @@ import Company from './pages/Company';
 import Search from './pages/Search';
 import ExperienceNew from './pages/ExperienceNew';
 import CompanyMatchingResume from './pages/CompanyMatching/CompanyMatchingResume';
+import CompanyMatchingResult from './pages/CompanyMatching/CompanyMatchingResult';
 
 const router = createBrowserRouter([
   {
@@ -18,7 +19,10 @@ const router = createBrowserRouter([
       { path: 'exp/new', element: <ExperienceNew /> },
       {
         path: 'company/matching/',
-        children: [{ path: 'resume', element: <CompanyMatchingResume /> }],
+        children: [
+          { path: 'resume', element: <CompanyMatchingResume /> },
+          { path: 'result', element: <CompanyMatchingResult /> },
+        ],
       },
       { path: 'dashboard', element: <Dashboard /> },
       { path: 'experience', element: <Experience /> },
