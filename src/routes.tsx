@@ -6,6 +6,7 @@ import Experience from './pages/Experience';
 import Company from './pages/Company';
 import Search from './pages/Search';
 import ExperienceNew from './pages/ExperienceNew';
+import CompanyMatchingResume from './pages/CompanyMatching/CompanyMatchingResume';
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
       { path: '', element: <Main /> },
       { path: 'search', element: <Search /> },
       { path: 'exp/new', element: <ExperienceNew /> },
+      {
+        path: 'company/matching/',
+        children: [{ path: 'resume', element: <CompanyMatchingResume /> }],
+      },
       { path: 'dashboard', element: <Dashboard /> },
       { path: 'experience', element: <Experience /> },
       { path: 'company', element: <Company /> },
