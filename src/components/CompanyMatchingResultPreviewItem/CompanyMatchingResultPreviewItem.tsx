@@ -2,8 +2,16 @@ import sampleCompanyLogo from '/images/sample/sample_company_logo.png';
 import neededIcon from '/images/svg/icons/needed.svg';
 import notNeededIcon from '/images/svg/icons/not_needed.svg';
 import enterIcon from '/images/svg/icons/enter.svg';
+import { useNavigate } from 'react-router-dom';
 
 function CompanyMatchingResultPreviewItem() {
+  const navigate = useNavigate();
+
+  // 상세 정보 보기 버튼 클릭 시 상세 정보 페이지로 이동
+  const handleGoToDetail = () => {
+    navigate('/company/matching/result/1');
+  };
+
   return (
     <div className='flex h-98 w-130 flex-col items-start rounded-[10px] border-2 border-solid border-[#DFDFDF] bg-white px-6 py-5.75'>
       {/* 기업 로고 & 기업명 & 직무 */}
@@ -102,7 +110,10 @@ function CompanyMatchingResultPreviewItem() {
       </div>
 
       {/* 상세 정보 보기 버튼 */}
-      <button className='mt-6.75 flex h-11 w-full cursor-pointer items-center justify-center gap-3 rounded bg-[#0043CE]'>
+      <button
+        className='mt-6.75 flex h-11 w-full cursor-pointer items-center justify-center gap-3 rounded bg-[#0043CE]'
+        onClick={handleGoToDetail}
+      >
         <span className='font-semibold text-white'>상세 정보 보기</span>
         <img src={enterIcon} alt='Go To Detail' className='w-4' />
       </button>

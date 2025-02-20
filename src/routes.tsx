@@ -8,6 +8,7 @@ import Search from './pages/Search';
 import ExperienceNew from './pages/ExperienceNew';
 import CompanyMatchingResume from './pages/CompanyMatching/CompanyMatchingResume';
 import CompanyMatchingResult from './pages/CompanyMatching/CompanyMatchingResult';
+import CompanyMatchingDetail from './pages/CompanyMatching/CompanyMatchingDetail';
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,7 @@ const router = createBrowserRouter([
         children: [
           { path: 'resume', element: <CompanyMatchingResume /> },
           { path: 'result', element: <CompanyMatchingResult /> },
+          { path: 'result/:id', element: <CompanyMatchingDetail /> },
         ],
       },
       { path: 'dashboard', element: <Dashboard /> },
