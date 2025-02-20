@@ -24,7 +24,7 @@ const MAIN_NAV_ITEMS = [
     desc: '등록된 경험을 바탕으로 맞춤형 이력서를 생성하세요.',
   },
   {
-    link: '/company/matching',
+    link: '/company/matching/resume',
     color: COLORS.purple,
     title: '기업 매칭',
     desc: '이력서를 기반으로 최적의 기업을 추천받으세요.',
