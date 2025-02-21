@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import ResumeExperiencePreviewItem from '../../../components/ResumeExperiencePreviewItem';
 import Stepper from '../../../shared/components/Stepper';
+import { useNavigate } from 'react-router-dom';
 
 // Step
 const STEP = [
@@ -12,11 +13,18 @@ const STEP = [
 ];
 
 function ResumeExperience() {
+  const navigate = useNavigate();
+
   const [selectedExp, setSelectedExp] = useState<number | null>(null); // 선택된 경험
 
   // 경험 선택 핸들러
   const handleSelectExp = (index: number) => {
     setSelectedExp(index);
+  };
+
+  // 다음 단계로 버튼 핸들러
+  const handleNextStepButtonClick = () => {
+    navigate('/resume/github');
   };
 
   return (
@@ -50,6 +58,7 @@ function ResumeExperience() {
               type='button'
               className='bg-main-blue mt-11.75 flex h-15.75 w-full cursor-pointer items-center justify-center rounded-[10px] text-xl font-semibold text-white transition-all duration-200 disabled:cursor-not-allowed disabled:bg-[#87A1E7]'
               disabled={selectedExp === null}
+              onClick={handleNextStepButtonClick}
             >
               다음 단계로 &gt;
             </button>

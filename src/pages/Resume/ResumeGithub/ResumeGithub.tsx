@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import Stepper from '../../../shared/components/Stepper';
 import githubLogoLightIcon from '/images/svg/logo/github_logo_light.svg';
 
@@ -11,6 +12,13 @@ const STEP = [
 ];
 
 function ResumeGithub() {
+  const navigate = useNavigate();
+
+  // 건너뛰기 / 다음 버튼 클릭 시
+  const handleNextButtonClick = () => {
+    navigate('/resume/company');
+  };
+
   return (
     <div className='w-main overflow-hidden'>
       <div className='mt-8.75 mb-12'>
@@ -81,6 +89,7 @@ function ResumeGithub() {
               <button
                 type='button'
                 className='flex h-full flex-1 cursor-pointer items-center justify-center gap-2 rounded-[10px] bg-[#F3F4F6] text-xl font-semibold text-[#374151]'
+                onClick={handleNextButtonClick}
               >
                 건너뛰기 &gt;
               </button>
