@@ -24,7 +24,7 @@ function ResumeExperience() {
       <div className='mt-8.75 mb-12'>
         <div className='flex flex-col items-center'>
           {/* Step Progress Bar */}
-          <Stepper step={STEP} currentStep={3} width={700} />
+          <Stepper step={STEP} currentStep={1} width={700} />
 
           {/* 경험 선택 리스트 */}
           <div className='mt-17.5 flex w-210 flex-col rounded-[10px] border-2 border-solid border-[#DFDFDF] bg-white p-9.25'>
@@ -44,6 +44,15 @@ function ResumeExperience() {
                 />
               ))}
             </div>
+
+            {/* 다음 단계로 버튼 */}
+            <button
+              type='button'
+              className='bg-main-blue mt-11.75 flex h-15.75 w-full cursor-pointer items-center justify-center rounded-[10px] text-xl font-semibold text-white transition-all duration-200 disabled:cursor-not-allowed disabled:bg-[#87A1E7]'
+              disabled={selectedExp === null}
+            >
+              다음 단계로 &gt;
+            </button>
           </div>
         </div>
       </div>

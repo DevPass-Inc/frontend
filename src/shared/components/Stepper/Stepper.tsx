@@ -15,7 +15,7 @@ function Stepper(props: StepperProps) {
       {step.map((item, idx) => (
         <div
           key={`stepper-item-${idx}`}
-          className={`stepper-item ${idx < currentStep - 1 ? 'completed' : ''}`}
+          className={`stepper-item ${idx < currentStep ? 'completed' : ''}`}
         >
           <div className='step-counter'>
             <img src={checkWhiteIcon} alt='check-white' className='w-3.5' />
