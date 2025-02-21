@@ -1,4 +1,5 @@
 import CompanyPositionItem from '../../components/CompanyPositionItem';
+import sampleCompanyIntroduce from '/images/sample/sample_company_introduce.png';
 
 function Company() {
   return (
@@ -29,6 +30,23 @@ function Company() {
               <div className='flex h-25 w-202 flex-wrap gap-5'>
                 <CompanyPositionItem />
                 <CompanyPositionItem />
+              </div>
+            </div>
+
+            {/* 회사 소개 */}
+            <div className='mt-13.25 flex flex-col items-start gap-3.75'>
+              {/* 타이틀 */}
+              <h2 className='text-lg leading-[21.78px] font-semibold'>
+                회사 소개
+              </h2>
+
+              {/* 이미지 */}
+              <div className='w-202'>
+                <img
+                  src={sampleCompanyIntroduce}
+                  alt='company-introduce'
+                  className='w-full object-cover'
+                />
               </div>
             </div>
           </div>
