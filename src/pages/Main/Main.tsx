@@ -18,7 +18,7 @@ const MAIN_NAV_ITEMS = [
     desc: '프로젝트, 인턴십 등의 개발 경험을 등록해 관리하세요.',
   },
   {
-    link: '/resume/new',
+    link: '/resume/exp',
     color: COLORS.green,
     title: '이력서 생성',
     desc: '등록된 경험을 바탕으로 맞춤형 이력서를 생성하세요.',
