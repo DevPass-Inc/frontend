@@ -26,9 +26,9 @@ const router = createBrowserRouter([
           { path: 'result/:id', element: <CompanyMatchingDetail /> },
         ],
       },
+      { path: 'company/:id', element: <Company /> },
       { path: 'dashboard', element: <Dashboard /> },
       { path: 'experience', element: <Experience /> },
-      { path: 'company', element: <Company /> },
     ],
   },
 ]);
