@@ -79,3 +79,7 @@
   letter-spacing: 0.5px;
   line-height: 16px;
 }
+
+.stepper-item.completed .step-name {
+  color: #2463eb;
+}

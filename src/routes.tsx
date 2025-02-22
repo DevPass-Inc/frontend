@@ -12,6 +12,7 @@ import CompanyMatchingDetail from './pages/CompanyMatching/CompanyMatchingDetail
 import ResumeExperience from './pages/Resume/ResumeExperience';
 import ResumeGithub from './pages/Resume/ResumeGithub';
 import ResumeCompany from './pages/Resume/ResumeCompany';
+import ResumeCreate from './pages/Resume/ResumeCreate';
 
 const router = createBrowserRouter([
   {
@@ -36,6 +37,7 @@ const router = createBrowserRouter([
           { path: 'exp', element: <ResumeExperience /> },
           { path: 'github', element: <ResumeGithub /> },
           { path: 'company', element: <ResumeCompany /> },
+          { path: 'create', element: <ResumeCreate /> },
         ],
       },
       { path: 'dashboard', element: <Dashboard /> },
