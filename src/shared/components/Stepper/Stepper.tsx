@@ -17,10 +17,22 @@ function Stepper(props: StepperProps) {
           key={`stepper-item-${idx}`}
           className={`stepper-item ${idx < currentStep ? 'completed' : ''}`}
         >
-          <div className='step-counter'>
+          <div
+            className='step-counter'
+            style={{
+              backgroundColor: `${currentStep === 5 && idx === 4 && '#198038'}`,
+            }}
+          >
             <img src={checkWhiteIcon} alt='check-white' className='w-3.5' />
           </div>
-          <div className='step-name'>{item}</div>
+          <div
+            className='step-name'
+            style={{
+              color: `${currentStep === 5 && idx === 4 && '#198038'}`,
+            }}
+          >
+            {item}
+          </div>
         </div>
       ))}
     </div>
