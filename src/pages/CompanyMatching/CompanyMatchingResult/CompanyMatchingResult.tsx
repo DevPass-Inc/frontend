@@ -1,6 +1,26 @@
+import { useEffect, useState } from 'react';
+import {
+  CompanyMatchingResultItem,
+  fetchCompanyMatchingResults,
+  FetchCompanyMatchingResultsResponse,
+} from '../../../api/recruitment';
 import CompanyMatchingResultPreviewItem from '../../../components/CompanyMatchingResultPreviewItem';
 
 function CompanyMatchingResult() {
+  const [companyMatchingResults, setCompanyMatchingResults] = useState<
+    CompanyMatchingResultItem[]
+  >([]);
+
+  useEffect(() => {
+    fetchCompanyMatchingResults()
+      .then((res: FetchCompanyMatchingResultsResponse) => {
+        setCompanyMatchingResults(res.result);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
+
   return (
     <div className='w-main overflow-hidden'>
       <div className='mt-12.5'>
@@ -16,13 +36,16 @@ function CompanyMatchingResult() {
           </div>
 
           {/* 기업 매칭 결과 리스트 */}
-          <div className='flex w-full flex-wrap justify-center gap-5'>
-            {Array.from({ length: 2 }).map((_, index) => (
-              <CompanyMatchingResultPreviewItem
-                key={`company-matching-result-preview-item-${index}`}
-              />
-            ))}
-          </div>
+          {companyMatchingResults.length > 0 && (
+            <div className='flex w-full flex-wrap justify-center gap-5'>
+              {Array.from({ length: 2 }).map((_, index) => (
+                <CompanyMatchingResultPreviewItem
+                  key={`company-matching-result-preview-item-${index}`}
+                  result={companyMatchingResults[index]}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

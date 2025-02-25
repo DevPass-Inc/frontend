@@ -3,8 +3,17 @@ import neededIcon from '/images/svg/icons/needed.svg';
 import notNeededIcon from '/images/svg/icons/not_needed.svg';
 import enterIcon from '/images/svg/icons/enter.svg';
 import { useNavigate } from 'react-router-dom';
+import { CompanyMatchingResultItem } from '../../api/recruitment';
 
-function CompanyMatchingResultPreviewItem() {
+interface CompanyMatchingResultPreviewItemProps {
+  result: CompanyMatchingResultItem;
+}
+
+function CompanyMatchingResultPreviewItem(
+  props: CompanyMatchingResultPreviewItemProps
+) {
+  const { result } = props;
+
   const navigate = useNavigate();
 
   // 상세 정보 보기 버튼 클릭 시 상세 정보 페이지로 이동
@@ -26,10 +35,10 @@ function CompanyMatchingResultPreviewItem() {
         {/* 기업명 & 직무 */}
         <div className='flex flex-col items-start'>
           <h3 className='leading-[19.36px] font-bold text-[#111827]'>
-            테크스타트
+            {result.companyName}
           </h3>
           <p className='text-sm leading-6.5 font-medium text-[#4C4C4C]'>
-            시니어 프론트엔드 개발자
+            {result.position}
           </p>
         </div>
       </div>
@@ -42,7 +51,7 @@ function CompanyMatchingResultPreviewItem() {
             매칭 점수
           </h4>
           <span className='text-main-blue text-sm leading-6.5 font-bold'>
-            85%
+            {result.finalScore}
           </span>
         </div>
 
@@ -50,7 +59,7 @@ function CompanyMatchingResultPreviewItem() {
         <div className='h-1.25 w-full rounded-[50px] bg-[#E4E7EB]'>
           <div
             className='bg-main-blue h-full rounded-[50px]'
-            style={{ width: '85%' }}
+            style={{ width: `${result.finalScore}` }}
           />
         </div>
       </div>
@@ -64,30 +73,21 @@ function CompanyMatchingResultPreviewItem() {
 
         {/* 기술 리스트 */}
         <div className='flex items-center gap-1.75'>
-          <div className='flex h-5 items-center justify-center gap-1.25 rounded-[10px] bg-[#D1FAE5] px-3'>
-            <span className='font-noto text-xs leading-[16.34px] font-semibold text-[#166434]'>
-              React
-            </span>
-            <img src={neededIcon} alt='Needed' className='h-3 w-3' />
-          </div>
-          <div className='flex h-5 items-center justify-center gap-1.25 rounded-[10px] bg-[#D1FAE5] px-3'>
-            <span className='font-noto text-xs leading-[16.34px] font-semibold text-[#166434]'>
-              Typescript
-            </span>
-            <img src={neededIcon} alt='Needed' className='h-3 w-3' />
-          </div>
-          <div className='flex h-5 items-center justify-center gap-1.25 rounded-[10px] bg-[#D1FAE5] px-3'>
-            <span className='font-noto text-xs leading-[16.34px] font-semibold text-[#166434]'>
-              Next.js
-            </span>
-            <img src={neededIcon} alt='Needed' className='h-3 w-3' />
-          </div>
-          <div className='flex h-5 items-center justify-center gap-1.25 rounded-[10px] bg-[#FDE2E1] px-3'>
-            <span className='font-noto text-xs leading-[16.34px] font-semibold text-[#981B1B]'>
-              Javascript
-            </span>
-            <img src={notNeededIcon} alt='Not Needed' className='h-3 w-3' />
-          </div>
+          {result.stacks.map((stack, idx) => (
+            <div
+              key={`company-matching-result-preview-item-stack-${idx}`}
+              className='flex h-5 items-center justify-center gap-1.25 rounded-[10px] bg-[#D1FAE5] px-3'
+            >
+              <span className='font-noto text-xs leading-[16.34px] font-semibold text-[#166434]'>
+                {stack.stack}
+              </span>
+              <img
+                src={stack.required ? neededIcon : notNeededIcon}
+                alt={stack.required ? 'Needed' : 'Not Needed'}
+                className='h-3 w-3'
+              />
+            </div>
+          ))}
         </div>
       </div>
 
