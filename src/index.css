@@ -62,6 +62,9 @@
 @utility font-noto {
   font-family: 'Noto Sans KR', sans-serif;
 }
+@utility font-lato {
+  font-family: 'Lato', sans-serif;
+}
 
 /* === FONT SIZE === */
 @utility text-xxs {

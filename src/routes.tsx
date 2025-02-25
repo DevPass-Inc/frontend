@@ -9,6 +9,10 @@ import ExperienceNew from './pages/ExperienceNew';
 import CompanyMatchingResume from './pages/CompanyMatching/CompanyMatchingResume';
 import CompanyMatchingResult from './pages/CompanyMatching/CompanyMatchingResult';
 import CompanyMatchingDetail from './pages/CompanyMatching/CompanyMatchingDetail';
+import ResumeExperience from './pages/Resume/ResumeExperience';
+import ResumeGithub from './pages/Resume/ResumeGithub';
+import ResumeCompany from './pages/Resume/ResumeCompany';
+import ResumeCreate from './pages/Resume/ResumeCreate';
 
 const router = createBrowserRouter([
   {
@@ -27,6 +31,15 @@ const router = createBrowserRouter([
         ],
       },
       { path: 'company/:id', element: <Company /> },
+      {
+        path: 'resume/',
+        children: [
+          { path: 'exp', element: <ResumeExperience /> },
+          { path: 'github', element: <ResumeGithub /> },
+          { path: 'company', element: <ResumeCompany /> },
+          { path: 'create', element: <ResumeCreate /> },
+        ],
+      },
       { path: 'dashboard', element: <Dashboard /> },
       { path: 'experience', element: <Experience /> },
     ],
