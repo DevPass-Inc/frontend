@@ -1,8 +1,17 @@
 import { Link } from 'react-router-dom';
 import NavigationMenu from '../NavigationMenu';
 import devPassLogo from '/images/svg/logo/devpass_logo.svg';
+import { useState } from 'react';
+import SignUpModal from '../../../components/Modal/SignUpModal';
 
 function NavigationBar() {
+  const [isSignUpModalOpen, setIsSignUpModalOpen] = useState<boolean>(false);
+
+  // 회원가입 버튼 클릭 이벤트
+  const handleSignUpButtonClick = () => {
+    setIsSignUpModalOpen(true);
+  };
+
   return (
     <nav className='border-nav h-nav flex w-full justify-center border-b border-solid bg-white'>
       {/* 네비게이션 바 */}
@@ -17,11 +26,29 @@ function NavigationBar() {
 
         {/* 네비게이션 메뉴 */}
         <div className='flex h-10 gap-3.5'>
-          <NavigationMenu link={'/dashboard'} title={'대시보드'} />
+          {/* <NavigationMenu link={'/dashboard'} title={'대시보드'} />
           <NavigationMenu link={'/experience'} title={'경험 관리'} />
-          <NavigationMenu link={'/company'} title={'기업 탐색'} />
+          <NavigationMenu link={'/company'} title={'기업 탐색'} /> */}
+          <button
+            type='button'
+            className='text-main-gray flex h-full w-20 cursor-pointer items-center justify-center rounded bg-transparent text-sm font-medium'
+          >
+            로그인
+          </button>
+          <button
+            type='button'
+            className='text-main-gray flex h-full w-20 cursor-pointer items-center justify-center rounded bg-transparent text-sm font-medium'
+            onClick={handleSignUpButtonClick}
+          >
+            회원가입
+          </button>
         </div>
       </div>
+
+      {/* 회원가입 모달 */}
+      {isSignUpModalOpen && (
+        <SignUpModal onClose={() => setIsSignUpModalOpen(false)} />
+      )}
     </nav>
   );
 }
