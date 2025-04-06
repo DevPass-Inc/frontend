@@ -1,12 +1,13 @@
 interface ExperienceItemProps {
+  id: number;
   title: string;
-  desc: string;
-  isSelected: boolean; // 선택 여부
-  onClick: () => void; // 클릭 시 이벤트
+  description: string;
+  isSelected: boolean;
+  onClick: () => void;
 }
 
 function ExperienceItem(props: ExperienceItemProps) {
-  const { title, desc, isSelected, onClick } = props;
+  const { id, title, description, isSelected, onClick } = props;
 
   return (
     <button
@@ -21,7 +22,7 @@ function ExperienceItem(props: ExperienceItemProps) {
       <h4 className='text-xl leading-[24.2px] font-semibold'>{title}</h4>
 
       {/* 경험 설명 */}
-      <p className='leading-[19.36px] font-medium'>{desc}</p>
+      <p className='leading-[19.36px] font-medium'>{description}</p>
     </button>
   );
 }
