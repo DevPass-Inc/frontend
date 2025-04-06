@@ -5,23 +5,24 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 interface ExperienceItemNewProps {
   onCancel: () => void;
-  setSelectedExp: (expId: number) => void;
+  setSelectedExpId: (expId: number) => void;
 }
 
 function ExperienceItemNew(props: ExperienceItemNewProps) {
-  const { onCancel, setSelectedExp } = props;
+  const { onCancel, setSelectedExpId } = props;
 
   const [devExpTitle, setDevExpTitle] = useState<string>(''); // 경험 제목
   const [devExpDescription, setDevExpDescription] = useState<string>(''); // 경험 설명
 
   const queryClient = useQueryClient();
 
+  // 개발 경험 등록 API 호출
   const mutation = useMutation({
     mutationFn: addDevExperience,
     onSuccess: (data) => {
       console.log('개발 경험 등록 성공', data);
       queryClient.invalidateQueries({ queryKey: ['devExperiences'] }); // 캐시 무효화 -> 목록 자동 refetch
-      setSelectedExp(data.id); // 등록된 경험으로 포커스 이동
+      setSelectedExpId(data.id); // 등록된 경험으로 포커스 이동
     },
     onError: (err) => {
       console.error('개발 경험 등록 실패', err);

@@ -1,8 +1,10 @@
 import ExperienceInputItem from '../../shared/components/ExperienceInputItem';
 import ExperienceSaveOrAddButton from '../../shared/components/ExperienceSaveOrAddButton';
+import { DevExperienceDetail } from '../../types/dev-experience.types';
 
 interface ExperienceFormProps {
   currentTab: 'project' | 'stack' | 'intern';
+  selectedDevExperienceDetail: DevExperienceDetail;
 }
 
 const PROJECT_TITLES = [
@@ -25,7 +27,7 @@ const INTERN_TITLES = [
 ];
 
 function ExperienceForm(props: ExperienceFormProps) {
-  const { currentTab } = props;
+  const { currentTab, selectedDevExperienceDetail } = props;
 
   return (
     <>

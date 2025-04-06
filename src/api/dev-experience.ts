@@ -1,28 +1,14 @@
 import axios from 'axios';
-
-export interface DevExperience {
-  id: number;
-  title: string;
-  description: string;
-}
-
-interface FetchDevExperienceResponse {
-  httpStatus: string;
-  code: string;
-  message: string;
-  result: DevExperience[];
-}
-
-interface AddDevExperienceResponse {
-  httpStatus: string;
-  code: string;
-  message: string;
-  result: DevExperience;
-}
+import {
+  ApiResponse,
+  DevExperience,
+  DevExperienceDetail,
+  Project,
+} from '../types/dev-experience.types';
 
 // 개발 경험 리스트 조회 API
 export const fetchDevExperiences = async (): Promise<DevExperience[]> => {
-  const response = await axios.get<FetchDevExperienceResponse>(
+  const response = await axios.get<ApiResponse<DevExperience[]>>(
     `http://localhost:8080/api/developments/dev-experiences`
   );
 
@@ -34,9 +20,31 @@ export const addDevExperience = async (newExp: {
   title: string;
   description: string;
 }): Promise<DevExperience> => {
-  const response = await axios.post<AddDevExperienceResponse>(
+  const response = await axios.post<ApiResponse<DevExperience>>(
     `http://localhost:8080/api/developments/dev-experiences`,
     newExp
+  );
+
+  return response.data.result;
+};
+
+// 개발 경험 상세 조회 API
+export const fetchDevExperienceById = async (
+  id: number
+): Promise<DevExperienceDetail> => {
+  const response = await axios.get<ApiResponse<DevExperienceDetail>>(
+    `http://localhost:8080/api/developments/dev-experiences/${id}`
+  );
+
+  return response.data.result;
+};
+
+// 프로젝트 경험 등록 API
+export const addProjectExperienceById = async (
+  id: number
+): Promise<Project> => {
+  const response = await axios.post<ApiResponse<Project>>(
+    `http://localhost:8080/api/developments/projects/${id}`
   );
 
   return response.data.result;
