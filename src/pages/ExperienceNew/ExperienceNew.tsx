@@ -189,6 +189,7 @@ function ExperienceNew() {
                   <ExperienceForm
                     currentTab={currentTab}
                     selectedDevExperienceDetail={selectedDevExperienceDetail}
+                    selectedExpId={selectedExpId}
                   />
                 </div>
               </>
