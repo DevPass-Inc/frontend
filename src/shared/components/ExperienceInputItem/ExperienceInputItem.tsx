@@ -2,11 +2,13 @@ interface ExperienceInputItemProps {
   label: string;
   name: string;
   value: string;
+  placeholder?: string;
+  isDate?: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 function ExperienceInputItem(props: ExperienceInputItemProps) {
-  const { label, name, value, onChange } = props;
+  const { label, name, value, placeholder, onChange } = props;
 
   return (
     <div className='flex w-full flex-col gap-1.25'>
@@ -17,6 +19,7 @@ function ExperienceInputItem(props: ExperienceInputItemProps) {
       >
         <input
           type='text'
+          placeholder={placeholder}
           className='text-main h-full w-full bg-transparent px-3 text-sm outline-none'
           name={name}
           value={value}

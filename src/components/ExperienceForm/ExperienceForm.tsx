@@ -10,22 +10,62 @@ import {
   fetchProjectExperienceById,
 } from '../../api/dev-experience';
 import ExperiencePreviewItem from '../ExperiencePreviewItem';
+import { MdCancel } from 'react-icons/md';
 
+// 프로젝트 입력 폼 필드
 const PROJECT_FIELDS = [
-  { name: 'title', label: '프로젝트명' },
-  { name: 'introduce', label: '프로젝트 개요 (간단한 소개)' },
-  { name: 'position', label: '담당 분야' },
-  { name: 'startDate', label: '기간 시작일' },
-  { name: 'endDate', label: '기간 종료일' },
-  { name: 'content', label: '구현 내용' },
+  {
+    name: 'title',
+    label: '프로젝트명',
+    placeholder: '프로젝트명을 입력해주세요',
+  },
+  {
+    name: 'introduce',
+    label: '프로젝트 개요 (간단한 소개)',
+    placeholder: '프로젝트에 대해 간단하게 소개해 주세요',
+  },
+  {
+    name: 'position',
+    label: '담당 분야',
+    placeholder: '본인의 역할이나 맡은 업무를 입력해주세요',
+  },
+  {
+    name: 'startDate',
+    label: '기간 시작일',
+    isDate: true,
+  },
+  {
+    name: 'endDate',
+    label: '기간 종료일',
+    isDate: true,
+  },
+  {
+    name: 'content',
+    label: '구현 내용',
+    placeholder:
+      '주요 기능, 사용 기술, 문제 해결 경험 등을 상세히 작성해주세요',
+  },
 ];
 
+// 인턴 입력 폼 필드
 const INTERN_FIELDS = [
-  { name: 'companyName', label: '회사명' },
-  { name: 'position', label: '직무' },
-  { name: 'startDate', label: '시작일' },
-  { name: 'endDate', label: '종료일' },
-  { name: 'content', label: '구현 내용' },
+  {
+    name: 'companyName',
+    label: '회사명',
+    placeholder: '근무한 회사명을 입력해주세요',
+  },
+  {
+    name: 'position',
+    label: '직무',
+    placeholder: '담당했던 직무나 역할을 입력해주세요',
+  },
+  { name: 'startDate', label: '시작일', isDate: true },
+  { name: 'endDate', label: '종료일', isDate: true },
+  {
+    name: 'content',
+    label: '구현 내용',
+    placeholder: '참여한 업무, 주요 성과, 사용 기술 등을 상세히 작성해주세요',
+  },
 ];
 
 interface ExperienceFormProps {
@@ -41,10 +81,6 @@ function ExperienceForm(props: ExperienceFormProps) {
 
   const [isInputMode, setIsInputMode] = useState<boolean>(false); // 입력 모드 여부
   const [isEditMode, setIsEditMode] = useState<boolean>(false); // 수정 모드 여부
-  // 클릭한 미리보기 아이템 ID
-  const [selectedPreviewItemId, setSelectedPreviewItemId] = useState<
-    number | null
-  >(null);
 
   // 프로젝트 등록 데이터 폼
   const [projectForm, setProjectForm] = useState({
@@ -55,8 +91,8 @@ function ExperienceForm(props: ExperienceFormProps) {
     endDate: '',
     content: '',
   });
-  // 스택 등록 데이터 폼
-  const [stackForm, setStackForm] = useState<string[]>([]);
+  const [stackForm, setStackForm] = useState<string[]>([]); // 스택 등록 데이터 폼
+  const [existingStacks, setExistingStacks] = useState<string[]>([]); // 기존 스택 데이터
   // 인턴 등록 데이터 폼
   const [internshipForm, setInternshipForm] = useState({
     companyName: '',
@@ -88,13 +124,16 @@ function ExperienceForm(props: ExperienceFormProps) {
 
   // 스택 등록 API 호출
   const addStackMutation = useMutation({
-    mutationFn: (data: Stack[]) => addStackExperienceById(selectedExpId, data),
+    mutationFn: (data: string[]) => addStackExperienceById(selectedExpId, data),
     onSuccess: (data) => {
       console.log('스택 등록 성공', data);
       queryClient.invalidateQueries(); // 캐시 무효화 -> 데이터 갱신
 
       // 입력 모드 종료
       setIsInputMode(false);
+
+      // 입력 폼 초기화
+      resetStackForm();
     },
     onError: (error) => {
       console.error('스택 등록 실패', error);
@@ -132,16 +171,43 @@ function ExperienceForm(props: ExperienceFormProps) {
       // 수정 모드 종료
       setIsEditMode(false);
       setIsInputMode(false);
-      setSelectedPreviewItemId(null); // 선택된 미리보기 아이템 ID 초기화
       resetAllInputForm(); // 입력 폼 초기화
     } else if (isInputMode && !isEditMode) {
       if (currentTab === 'project') {
+        if (
+          !projectForm.title ||
+          !projectForm.introduce ||
+          !projectForm.position ||
+          !projectForm.startDate ||
+          !projectForm.endDate ||
+          !projectForm.content
+        ) {
+          alert('모든 필드를 입력해주세요.'); // 모든 필드가 입력되지 않은 경우 알림
+          return;
+        }
+
         // 프로젝트 경험 등록 API 호출
         addProjectMutation.mutate(projectForm);
       } else if (currentTab === 'stack') {
+        if (stackForm.length === 0) {
+          alert('기술 스택을 추가해주세요.'); // 기술 스택이 입력되지 않은 경우 알림
+          return;
+        }
+
         // 스택 경험 등록 API 호출
         addStackMutation.mutate(stackForm);
       } else if (currentTab === 'intern') {
+        if (
+          !internshipForm.companyName ||
+          !internshipForm.position ||
+          !internshipForm.startDate ||
+          !internshipForm.endDate ||
+          !internshipForm.content
+        ) {
+          alert('모든 필드를 입력해주세요.'); // 모든 필드가 입력되지 않은 경우 알림
+          return;
+        }
+
         // 인턴 경험 등록 API 호출
         addInternshipMutation.mutate(internshipForm);
       }
@@ -165,20 +231,50 @@ function ExperienceForm(props: ExperienceFormProps) {
         return;
       }
 
-      if (inputValue && !stackForm.includes(inputValue)) {
+      if (
+        inputValue &&
+        !stackForm.includes(inputValue) &&
+        !existingStacks.includes(inputValue)
+      ) {
         // 입력값이 비어있지 않고, 기존 스택에 없는 경우에만 추가
         setStackForm((prev) => [...prev, inputValue]); // 기존의 기술 스택에 추가
         (e.target as HTMLInputElement).value = ''; // 입력 필드 초기화
       } else {
         alert('이미 추가된 기술 스택입니다.'); // 중복된 경우 알림
+        (e.target as HTMLInputElement).value = ''; // 입력 필드 초기화
       }
+    }
+  };
+
+  // 기술 스택 추가 버튼 클릭 핸들러
+  const handleStackAddButtonClick = () => {
+    const inputElement = document.querySelector(
+      'input[placeholder="추가할 기술 스택을 입력해주세요."]'
+    ) as HTMLInputElement;
+
+    const inputValue = inputElement.value; // 입력값 가져오기
+
+    if (inputValue === '') {
+      alert('기술 스택을 입력해주세요.'); // 입력값이 비어있을 경우 알림
+      return;
+    }
+
+    if (
+      inputValue &&
+      !stackForm.includes(inputValue) &&
+      !existingStacks.includes(inputValue)
+    ) {
+      // 입력값이 비어있지 않고, 기존 스택에 없는 경우에만 추가
+      setStackForm((prev) => [...prev, inputValue]); // 기존의 기술 스택에 추가
+      inputElement.value = ''; // 입력 필드 초기화
+    } else {
+      alert('이미 추가된 기술 스택입니다.'); // 중복된 경우 알림
+      inputElement.value = ''; // 입력 필드 초기화
     }
   };
 
   // 미리보기 아이템 클릭 핸들러
   const handlePreviewItemClick = (id: number) => {
-    setSelectedPreviewItemId(id); // 클릭한 미리보기 아이템 ID 저장
-
     if (currentTab === 'project') {
       fetchProjectExperienceById(id)
         .then((res) => {
@@ -211,7 +307,6 @@ function ExperienceForm(props: ExperienceFormProps) {
   const handleCancelButtonClick = () => {
     setIsInputMode(false); // 입력 모드 종료
     setIsEditMode(false); // 수정 모드 종료
-    setSelectedPreviewItemId(null); // 선택된 미리보기 아이템 ID 초기화
     resetAllInputForm(); // 입력 폼 초기화
   };
 
@@ -225,6 +320,11 @@ function ExperienceForm(props: ExperienceFormProps) {
       endDate: '',
       content: '',
     });
+  };
+
+  // 기술 스택 입력 폼 초기화 함수
+  const resetStackForm = () => {
+    setStackForm([]);
   };
 
   // 인턴 입력 폼 초기화 함수
@@ -257,19 +357,28 @@ function ExperienceForm(props: ExperienceFormProps) {
     });
   };
 
+  // 추가할 기술 스택 삭제 버튼 클릭 핸들러
+  const handleStackDeleteButtonClick = (stack: string) => {
+    setStackForm((prev) => prev.filter((item) => item !== stack)); // 선택한 스택 삭제
+  };
+
   useEffect(() => {
     if (selectedDevExperienceDetail) {
-      setStackForm(
+      setExistingStacks(
         selectedDevExperienceDetail.stacks.map((stack) => stack.stack)
       );
     }
   }, [selectedDevExperienceDetail]);
 
+  // 탭 변경 시 실행됨
   useEffect(() => {
-    setIsInputMode(false); // 탭 변경 시 입력 모드 종료
-    setIsEditMode(false); // 탭 변경 시 수정 모드 종료
-    setSelectedPreviewItemId(null); // 탭 변경 시 선택된 미리보기 아이템 ID 초기화
-    resetAllInputForm(); // 입력 폼 초기화
+    if (currentTab === 'stack') {
+      setIsInputMode(true); // 스택 탭 클릭 시 입력 모드로 전환 (스택 탭은 입력 모드만 존재하기 때문)
+    } else {
+      setIsInputMode(false); // 탭 변경 시 입력 모드 종료
+      setIsEditMode(false); // 탭 변경 시 수정 모드 종료
+      resetAllInputForm(); // 입력 폼 초기화
+    }
   }, [currentTab]);
 
   return (
@@ -299,6 +408,7 @@ function ExperienceForm(props: ExperienceFormProps) {
                 label={project.label}
                 name={project.name}
                 value={projectForm[project.name as keyof typeof projectForm]}
+                placeholder={project.placeholder}
                 onChange={(e) => {
                   setProjectForm((prev) => ({
                     ...prev,
@@ -313,35 +423,78 @@ function ExperienceForm(props: ExperienceFormProps) {
       {/* 스택 */}
       {currentTab === 'stack' && (
         <div className='flex w-full flex-col gap-4.5'>
+          {/* 기술 스택 추가 폼 */}
           <div className='flex w-full flex-col gap-3.5'>
             <div className='flex w-full flex-col gap-1.25'>
               <span className='text-sm leading-4 font-medium'>
                 기술 스택 추가
               </span>
-              <div
-                className='flex h-10 w-full rounded-[5px]'
-                style={{ border: '1px solid #898989B2' }}
-              >
-                <input
-                  type='text'
-                  className='text-main h-full w-full bg-transparent px-3 text-sm outline-none'
-                  placeholder='기술 스택을 입력해주세요.'
-                  onKeyDown={handleStackInputKeyDown}
-                />
+
+              <div className='flex h-10 w-full items-center gap-3'>
+                {/* 기술 스택 입력 필드 */}
+                <div
+                  className='flex h-full flex-1 rounded-[5px]'
+                  style={{ border: '1px solid #898989B2' }}
+                >
+                  <input
+                    type='text'
+                    className='text-main h-full w-full bg-transparent px-3 text-sm outline-none'
+                    placeholder='추가할 기술 스택을 입력해주세요.'
+                    onKeyDown={handleStackInputKeyDown}
+                  />
+                </div>
+
+                {/* 기술 스택 추가 버튼 */}
+                <button
+                  type='button'
+                  className='bg-main-blue flex h-full cursor-pointer items-center justify-center rounded-[5px] px-5 text-sm font-medium text-white transition-all duration-200 hover:bg-[#1D40AF] hover:brightness-95'
+                  onClick={handleStackAddButtonClick}
+                >
+                  추가
+                </button>
               </div>
             </div>
           </div>
+
+          {/* 기존 기술 스택 & 추가할 기술 스택 목록 */}
           <div className='flex w-full flex-col items-start gap-4.5'>
             <span className='text-sm leading-4 font-semibold text-[#4c4c4c]'>
               선택된 기술 스택
             </span>
-            <div className='flex w-full items-center justify-start gap-3'>
-              {stackForm.map((stack, idx) => (
+            {/* 기술 스택 목록 */}
+            <div className='flex w-full flex-wrap items-center justify-start gap-3'>
+              {/* 기존 기술 스택 */}
+              {existingStacks.map((stack, idx) => (
                 <div
                   key={`${stack}-${idx}`}
                   className='flex h-5 items-center justify-center rounded-[10px] bg-[#DBE9FE] px-2.25 text-xs font-semibold text-[#1D40AF]'
                 >
                   {stack}
+                </div>
+              ))}
+
+              {/* 추가할 기술 스택 */}
+              {stackForm.map((stack, idx) => (
+                <div
+                  key={`${stack}-${idx}`}
+                  className='relative flex h-5 items-center justify-center rounded-[10px] bg-[#DBE9FE] px-2.25'
+                >
+                  {/* 기술 스택명 */}
+                  <span className='text-xs font-semibold text-[#1D40AF]'>
+                    {stack}
+                  </span>
+
+                  {/* 삭제 버튼 */}
+                  <button
+                    type='button'
+                    className='absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 cursor-pointer rounded-full p-1.5'
+                    onClick={() => handleStackDeleteButtonClick(stack)}
+                  >
+                    <MdCancel
+                      className='text-[#e95656] transition-all duration-200 hover:text-[#FF0000]'
+                      size={16}
+                    />
+                  </button>
                 </div>
               ))}
             </div>
@@ -376,6 +529,7 @@ function ExperienceForm(props: ExperienceFormProps) {
                 value={
                   internshipForm[intern.name as keyof typeof internshipForm]
                 }
+                placeholder={intern.placeholder}
                 onChange={(e) => {
                   setInternshipForm((prev) => ({
                     ...prev,
@@ -388,8 +542,8 @@ function ExperienceForm(props: ExperienceFormProps) {
       )}
 
       {/* 저장 / 프로젝트 추가 버튼 */}
-      <div className='mt-20 flex w-full items-center justify-end gap-3'>
-        {(isEditMode || isInputMode) && (
+      <div className='mt-5 flex w-full items-center justify-end gap-3'>
+        {(isEditMode || isInputMode) && currentTab !== 'stack' && (
           <button
             type='button'
             className='flex h-10 cursor-pointer items-center justify-center gap-2 rounded border border-solid border-red-500 bg-transparent px-4 font-medium text-red-500 transition-all duration-200 hover:bg-red-50'

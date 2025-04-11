@@ -74,7 +74,6 @@ function ExperienceNew() {
   useEffect(() => {
     if (selectedDevExperienceDetail) {
       console.log('선택한 경험 상세 조회 성공', selectedDevExperienceDetail);
-      setCurrentTab('project'); // 기본 탭을 'project'로 설정
     }
   }, [selectedDevExperienceDetail]);
 
