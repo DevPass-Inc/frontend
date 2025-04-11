@@ -1,18 +1,89 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ExperienceItem from '../../shared/components/ExperienceItem';
 import ExperienceNewEmptyAlert from '../../shared/components/ExperienceNewEmptyAlert';
 import ExperienceCurrentTab from '../../components/ExperienceCurrentTab';
 import ExperienceForm from '../../components/ExperienceForm';
+import {
+  fetchDevExperienceById,
+  fetchDevExperiences,
+} from '../../api/dev-experience';
+import ExperienceItemNew from '../../shared/components/ExperienceItemNew';
+import { useQuery } from '@tanstack/react-query';
 
 function ExperienceNew() {
-  const [selectedExp, setSelectedExp] = useState<string | null>(null); // 선택된 경험
+  const [selectedExpId, setSelectedExpId] = useState<number | null>(null); // 선택된 경험
   const [currentTab, setCurrentTab] = useState<'project' | 'stack' | 'intern'>(
     'project'
   ); // 현재 탭
 
+  const [showNewExpForm, setShowNewExpForm] = useState<boolean>(false); // 새로운 경험 추가 폼 표시 여부
+
+  // 마운트 시 개발 경험 목록 조회 API 호출
+  const {
+    data: devExperiences = [],
+    isLoading: isDevExperiencesLoading,
+    isError: isDevExperiencesError,
+    error: devExperiencesError,
+  } = useQuery({
+    queryKey: ['devExperiences'],
+    queryFn: fetchDevExperiences,
+  });
+
+  // 경험 선택 시 선택된 경험 상세 조회 API 호출
+  const {
+    data: selectedDevExperienceDetail,
+    isLoading: isDevExperienceDetailLoading,
+    isError: isDevExperienceDetailError,
+    error: devExerienceDetailError,
+  } = useQuery({
+    queryKey: ['devExperienceDetail', selectedExpId],
+    queryFn: () => {
+      if (selectedExpId === null)
+        return Promise.reject('선택된 경험이 없습니다.');
+      return fetchDevExperienceById(selectedExpId);
+    },
+    enabled: !!selectedExpId, // selectedExpId가 null이 아닐 때만 API 호출
+  });
+
+  // 새로운 경험 추가 버튼 클릭 핸들러
+  const handleAddNewItemButtonClick = () => {
+    setShowNewExpForm(true);
+  };
+
+  // 경험 탭 선택 핸들러
   const handleTabClick = (tab: 'project' | 'stack' | 'intern') => {
     setCurrentTab(tab);
   };
+
+  // 개발 경험 목록 조회 성공 시 실행
+  useEffect(() => {
+    if (devExperiences.length > 0) {
+      console.log('개발 경험 목록 조회 성공', devExperiences);
+    }
+  }, [devExperiences]);
+
+  // 개발 경험 목록 조회 실패 시 실행
+  useEffect(() => {
+    if (isDevExperiencesError) {
+      console.error('개발 경험 목록 조회 실패', devExperiencesError);
+      alert('개발 경험 목록 조회에 실패했습니다. 다시 시도해 주세요.');
+    }
+  }, [isDevExperiencesError, devExperiencesError]);
+
+  // 선택한 경험 상세 조회 성공 시 실행
+  useEffect(() => {
+    if (selectedDevExperienceDetail) {
+      console.log('선택한 경험 상세 조회 성공', selectedDevExperienceDetail);
+    }
+  }, [selectedDevExperienceDetail]);
+
+  // 선택한 경험 상세 조회 실패 시 실행
+  useEffect(() => {
+    if (isDevExperienceDetailError) {
+      console.error('선택한 경험 상세 조회 실패', devExerienceDetailError);
+      alert('선택한 경험 상세 조회에 실패했습니다. 다시 시도해 주세요.');
+    }
+  }, [isDevExperienceDetailError, devExerienceDetailError]);
 
   return (
     <div className='w-main overflow-hidden'>
@@ -40,6 +111,7 @@ function ExperienceNew() {
               <button
                 type='button'
                 className='group flex h-9.5 w-full cursor-pointer items-center justify-center gap-4 rounded-[5px] border-2 border-dashed border-[#B2B2B2] bg-transparent transition-all duration-200 hover:border-[#2463EB]'
+                onClick={handleAddNewItemButtonClick}
               >
                 {/* 플러스 아이콘 */}
                 <svg
@@ -71,23 +143,30 @@ function ExperienceNew() {
                 </span>
               </button>
 
+              {/* 경험 추가 폼 */}
+              {showNewExpForm && (
+                <ExperienceItemNew
+                  onCancel={() => setShowNewExpForm(false)}
+                  setSelectedExpId={setSelectedExpId}
+                />
+              )}
+
               {/* 경험 목록 */}
-              <ExperienceItem
-                title={'경험 1'}
-                desc={'경험 설명'}
-                isSelected={selectedExp === '경험 1'}
-                onClick={() => setSelectedExp('경험 1')}
-              />
-              <ExperienceItem
-                title={'경험 2'}
-                desc={'경험 설명'}
-                isSelected={selectedExp === '경험 2'}
-                onClick={() => setSelectedExp('경험 2')}
-              />
+              {devExperiences.length > 0 &&
+                devExperiences.map((exp) => (
+                  <ExperienceItem
+                    key={exp.id}
+                    id={exp.id}
+                    title={exp.title}
+                    description={exp.description}
+                    isSelected={selectedExpId === exp.id}
+                    onClick={() => setSelectedExpId(exp.id)}
+                  />
+                ))}
             </div>
 
             {/* 선택한 경험이 없는 경우 */}
-            {!selectedExp && (
+            {!selectedExpId && (
               <>
                 {/* 왼쪽에서 경험을 선택하거나 새로 추가해주세요. */}
                 <ExperienceNewEmptyAlert />
@@ -95,7 +174,7 @@ function ExperienceNew() {
             )}
 
             {/* 선택한 경험이 있는 경우 */}
-            {selectedExp && (
+            {selectedExpId && selectedDevExperienceDetail && (
               <>
                 {/* 경험 추가 폼 */}
                 <div className='relative flex min-h-179.5 flex-1 flex-col items-center justify-start rounded-tr-[10px] rounded-b-[10px] border-2 border-solid border-[#DFDFDF] bg-white px-10 py-13'>
@@ -106,7 +185,11 @@ function ExperienceNew() {
                   />
 
                   {/* 내부 폼 */}
-                  <ExperienceForm currentTab={currentTab} />
+                  <ExperienceForm
+                    currentTab={currentTab}
+                    selectedDevExperienceDetail={selectedDevExperienceDetail}
+                    selectedExpId={selectedExpId}
+                  />
                 </div>
               </>
             )}
