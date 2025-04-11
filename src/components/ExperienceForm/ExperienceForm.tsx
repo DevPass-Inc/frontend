@@ -30,20 +30,22 @@ const PROJECT_FIELDS = [
     placeholder: '본인의 역할이나 맡은 업무를 입력해주세요',
   },
   {
+    name: 'content',
+    label: '구현 내용',
+    placeholder:
+      '주요 기능, 사용 기술, 문제 해결 경험 등을 상세히 작성해주세요',
+  },
+  {
     name: 'startDate',
     label: '기간 시작일',
+    placeholder: '프로젝트 시작일을 선택해주세요',
     isDate: true,
   },
   {
     name: 'endDate',
     label: '기간 종료일',
+    placeholder: '프로젝트 종료일을 선택해주세요',
     isDate: true,
-  },
-  {
-    name: 'content',
-    label: '구현 내용',
-    placeholder:
-      '주요 기능, 사용 기술, 문제 해결 경험 등을 상세히 작성해주세요',
   },
 ];
 
@@ -59,12 +61,22 @@ const INTERN_FIELDS = [
     label: '직무',
     placeholder: '담당했던 직무나 역할을 입력해주세요',
   },
-  { name: 'startDate', label: '시작일', isDate: true },
-  { name: 'endDate', label: '종료일', isDate: true },
   {
     name: 'content',
     label: '구현 내용',
     placeholder: '참여한 업무, 주요 성과, 사용 기술 등을 상세히 작성해주세요',
+  },
+  {
+    name: 'startDate',
+    label: '시작일',
+    placeholder: '인턴십 시작일을 선택해주세요',
+    isDate: true,
+  },
+  {
+    name: 'endDate',
+    label: '종료일',
+    placeholder: '인턴십 종료일을 선택해주세요',
+    isDate: true,
   },
 ];
 
@@ -409,12 +421,25 @@ function ExperienceForm(props: ExperienceFormProps) {
                 name={project.name}
                 value={projectForm[project.name as keyof typeof projectForm]}
                 placeholder={project.placeholder}
+                isDate={project.isDate}
                 onChange={(e) => {
                   setProjectForm((prev) => ({
                     ...prev,
                     [project.name]: e.target.value,
                   }));
                 }}
+                onDateChange={
+                  project.isDate
+                    ? (date) => {
+                        setProjectForm((prev) => ({
+                          ...prev,
+                          [project.name]: date
+                            ? date.toISOString().split('T')[0] // 'yyyy-MM-dd' 형식으로 변환
+                            : '',
+                        }));
+                      }
+                    : undefined
+                }
               />
             ))}
         </div>
@@ -530,12 +555,25 @@ function ExperienceForm(props: ExperienceFormProps) {
                   internshipForm[intern.name as keyof typeof internshipForm]
                 }
                 placeholder={intern.placeholder}
+                isDate={intern.isDate}
                 onChange={(e) => {
                   setInternshipForm((prev) => ({
                     ...prev,
                     [intern.name]: e.target.value,
                   }));
                 }}
+                onDateChange={
+                  intern.isDate
+                    ? (date) => {
+                        setInternshipForm((prev) => ({
+                          ...prev,
+                          [intern.name]: date
+                            ? date.toISOString().split('T')[0]
+                            : '',
+                        }));
+                      }
+                    : undefined
+                }
               />
             ))}
         </div>
