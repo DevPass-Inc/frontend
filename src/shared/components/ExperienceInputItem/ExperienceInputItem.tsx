@@ -36,6 +36,7 @@ function ExperienceInputItem(props: ExperienceInputItemProps) {
             dateFormat={'yyyy-MM-dd'}
             placeholderText={placeholder}
             className='text-main h-full w-full cursor-pointer bg-transparent px-3 text-sm outline-none'
+            isClearable
           />
         ) : (
           <input
