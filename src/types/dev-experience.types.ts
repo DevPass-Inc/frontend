@@ -43,10 +43,8 @@ export interface DevExperience {
 
 // 개발 경험 상세 조회 데이터 타입
 export interface DevExperienceDetail {
-  result: {
-    devExperience: DevExperience;
-    projects: Project[];
-    internships: Internship[];
-    stacks: Stack[];
-  };
+  devExperience: DevExperience;
+  projects: Project[];
+  internships: Internship[];
+  stacks: Stack[];
 }
