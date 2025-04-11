@@ -61,6 +61,25 @@ export const addProjectExperienceById = async (
   return response.data.result;
 };
 
+// 프로젝트 경험 상세 조회 API
+export const fetchProjectExperienceById = async (
+  id: number
+): Promise<Project> => {
+  const response = await axios.get<ApiResponse<Project>>(
+    `http://localhost:8080/api/developments/projects/${id}`
+  );
+
+  return response.data.result;
+};
+
+/**
+ * TODO: 프로젝트 경험 수정 API
+ */
+
+/**
+ * TODO: 프로젝트 경험 삭제 API
+ */
+
 // 기술스택 등록 API
 export const addStackExperienceById = async (
   id: number,
@@ -94,3 +113,15 @@ export const addInternshipExperienceById = async (
 
   return response.data.result;
 };
+
+/**
+ * TODO: 인턴십 경험 상세 조회 API
+ */
+
+/**
+ * TODO: 인턴십 경험 수정 API
+ */
+
+/**
+ * TODO: 인턴십 경험 삭제 API
+ */

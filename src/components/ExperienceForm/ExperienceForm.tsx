@@ -2,12 +2,14 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import ExperienceInputItem from '../../shared/components/ExperienceInputItem';
 import ExperienceSaveOrAddButton from '../../shared/components/ExperienceSaveOrAddButton';
 import { DevExperienceDetail, Stack } from '../../types/dev-experience.types';
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import {
   addInternshipExperienceById,
   addProjectExperienceById,
   addStackExperienceById,
+  fetchProjectExperienceById,
 } from '../../api/dev-experience';
+import ExperiencePreviewItem from '../ExperiencePreviewItem';
 
 const PROJECT_FIELDS = [
   { name: 'title', label: '프로젝트명' },
@@ -38,6 +40,11 @@ function ExperienceForm(props: ExperienceFormProps) {
   const queryClient = useQueryClient();
 
   const [isInputMode, setIsInputMode] = useState<boolean>(false); // 입력 모드 여부
+  const [isEditMode, setIsEditMode] = useState<boolean>(false); // 수정 모드 여부
+  // 클릭한 미리보기 아이템 ID
+  const [selectedPreviewItemId, setSelectedPreviewItemId] = useState<
+    number | null
+  >(null);
 
   // 프로젝트 등록 데이터 폼
   const [projectForm, setProjectForm] = useState({
@@ -68,14 +75,7 @@ function ExperienceForm(props: ExperienceFormProps) {
       queryClient.invalidateQueries(); // 캐시 무효화 -> 데이터 갱신
 
       // 입력 폼 초기화
-      setProjectForm({
-        title: '',
-        introduce: '',
-        position: '',
-        startDate: '',
-        endDate: '',
-        content: '',
-      });
+      resetProjectForm();
 
       // 입력 모드 종료
       setIsInputMode(false);
@@ -111,13 +111,7 @@ function ExperienceForm(props: ExperienceFormProps) {
       queryClient.invalidateQueries(); // 캐시 무효화 -> 데이터 갱신
 
       // 입력 폼 초기화
-      setInternshipForm({
-        companyName: '',
-        position: '',
-        startDate: '',
-        endDate: '',
-        content: '',
-      });
+      resetInternshipForm();
 
       // 입력 모드 종료
       setIsInputMode(false);
@@ -130,7 +124,17 @@ function ExperienceForm(props: ExperienceFormProps) {
 
   // 저장 버튼 클릭 핸들러
   const handleSaveOrAddButtonClick = () => {
-    if (isInputMode) {
+    if (isInputMode && isEditMode) {
+      /**
+       * TODO: 프로젝트 수정 API 연동
+       */
+      alert('수정 기능은 아직 구현되지 않았습니다.');
+      // 수정 모드 종료
+      setIsEditMode(false);
+      setIsInputMode(false);
+      setSelectedPreviewItemId(null); // 선택된 미리보기 아이템 ID 초기화
+      resetAllInputForm(); // 입력 폼 초기화
+    } else if (isInputMode && !isEditMode) {
       if (currentTab === 'project') {
         // 프로젝트 경험 등록 API 호출
         addProjectMutation.mutate(projectForm);
@@ -171,6 +175,88 @@ function ExperienceForm(props: ExperienceFormProps) {
     }
   };
 
+  // 미리보기 아이템 클릭 핸들러
+  const handlePreviewItemClick = (id: number) => {
+    setSelectedPreviewItemId(id); // 클릭한 미리보기 아이템 ID 저장
+
+    if (currentTab === 'project') {
+      fetchProjectExperienceById(id)
+        .then((res) => {
+          console.log('프로젝트 상세 조회 성공', res);
+          setIsInputMode(true); // 입력 모드로 전환
+          setIsEditMode(true); // 수정 모드로 전환
+          setProjectForm({
+            title: res.title,
+            introduce: res.introduce,
+            position: res.position,
+            startDate: res.startDate,
+            endDate: res.endDate,
+            content: res.content,
+          });
+        })
+        .catch((err) => {
+          console.error('프로젝트 상세 조회 실패', err);
+          alert('프로젝트 상세 조회에 실패했습니다. 다시 시도해주세요.');
+        });
+    } else if (currentTab === 'intern') {
+      /**
+       * TODO: 인턴십 상세 조회 API 연동
+       */
+      alert('인턴십 상세 조회 기능은 아직 구현되지 않았습니다.');
+      return;
+    }
+  };
+
+  // 취소 버튼 클릭 핸들러 (뒤로가기용)
+  const handleCancelButtonClick = () => {
+    setIsInputMode(false); // 입력 모드 종료
+    setIsEditMode(false); // 수정 모드 종료
+    setSelectedPreviewItemId(null); // 선택된 미리보기 아이템 ID 초기화
+    resetAllInputForm(); // 입력 폼 초기화
+  };
+
+  // 프로젝트 입력 폼 초기화 함수
+  const resetProjectForm = () => {
+    setProjectForm({
+      title: '',
+      introduce: '',
+      position: '',
+      startDate: '',
+      endDate: '',
+      content: '',
+    });
+  };
+
+  // 인턴 입력 폼 초기화 함수
+  const resetInternshipForm = () => {
+    setInternshipForm({
+      companyName: '',
+      position: '',
+      startDate: '',
+      endDate: '',
+      content: '',
+    });
+  };
+
+  // 전체 입력 폼 초기화 함수
+  const resetAllInputForm = () => {
+    setProjectForm({
+      title: '',
+      introduce: '',
+      position: '',
+      startDate: '',
+      endDate: '',
+      content: '',
+    });
+    setInternshipForm({
+      companyName: '',
+      position: '',
+      startDate: '',
+      endDate: '',
+      content: '',
+    });
+  };
+
   useEffect(() => {
     if (selectedDevExperienceDetail) {
       setStackForm(
@@ -181,6 +267,9 @@ function ExperienceForm(props: ExperienceFormProps) {
 
   useEffect(() => {
     setIsInputMode(false); // 탭 변경 시 입력 모드 종료
+    setIsEditMode(false); // 탭 변경 시 수정 모드 종료
+    setSelectedPreviewItemId(null); // 탭 변경 시 선택된 미리보기 아이템 ID 초기화
+    resetAllInputForm(); // 입력 폼 초기화
   }, [currentTab]);
 
   return (
@@ -194,18 +283,12 @@ function ExperienceForm(props: ExperienceFormProps) {
           {!isInputMode &&
             selectedDevExperienceDetail.projects.length > 0 &&
             selectedDevExperienceDetail.projects.map((project) => (
-              <div
+              <ExperiencePreviewItem
                 key={project.id}
-                style={{ boxShadow: '0px 2px 8px 0px rgba(0, 0, 0, 0.15)' }}
-                className='flex h-18 w-full cursor-pointer flex-col gap-1.25 rounded-[5px] bg-white px-5 py-3 text-[#1E1E1E] transition-all duration-200 hover:bg-gray-50'
-              >
-                <span className='text-xl leading-6 font-semibold'>
-                  {project.title}
-                </span>
-                <span className='text-base leading-[19px]'>
-                  {project.introduce}
-                </span>
-              </div>
+                title={project.title}
+                subtitle={project.introduce}
+                onClick={() => handlePreviewItemClick(project.id)}
+              />
             ))}
 
           {/* 프로젝트 입력 폼 */}
@@ -275,18 +358,12 @@ function ExperienceForm(props: ExperienceFormProps) {
           {!isInputMode &&
             selectedDevExperienceDetail.internships.length > 0 &&
             selectedDevExperienceDetail.internships.map((intern) => (
-              <div
+              <ExperiencePreviewItem
                 key={intern.id}
-                style={{ boxShadow: '0px 2px 8px 0px rgba(0, 0, 0, 0.15)' }}
-                className='flex h-18 w-full cursor-pointer flex-col gap-1.25 rounded-[5px] bg-white px-5 py-3 text-[#1E1E1E] transition-all duration-200 hover:bg-gray-50'
-              >
-                <span className='text-xl leading-6 font-semibold'>
-                  {intern.companyName}
-                </span>
-                <span className='text-base leading-[19px]'>
-                  {intern.position}
-                </span>
-              </div>
+                title={intern.companyName}
+                subtitle={intern.position}
+                onClick={() => handlePreviewItemClick(intern.id)}
+              />
             ))}
 
           {/* 인턴 입력 폼 */}
@@ -311,9 +388,18 @@ function ExperienceForm(props: ExperienceFormProps) {
       )}
 
       {/* 저장 / 프로젝트 추가 버튼 */}
-      <div className='mt-20 flex w-full justify-end'>
+      <div className='mt-20 flex w-full items-center justify-end gap-3'>
+        {(isEditMode || isInputMode) && (
+          <button
+            type='button'
+            className='flex h-10 cursor-pointer items-center justify-center gap-2 rounded border border-solid border-red-500 bg-transparent px-4 font-medium text-red-500 transition-all duration-200 hover:bg-red-50'
+            onClick={handleCancelButtonClick}
+          >
+            취소
+          </button>
+        )}
         <ExperienceSaveOrAddButton
-          title={isInputMode ? '저장' : '추가'}
+          title={isEditMode ? '수정' : isInputMode ? '저장' : '추가'}
           onClick={handleSaveOrAddButtonClick}
         />
       </div>
