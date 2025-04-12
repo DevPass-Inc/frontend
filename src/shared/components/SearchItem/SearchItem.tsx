@@ -51,11 +51,13 @@ function SearchItem(props: SearchItemProps) {
     >
       {/* 아이콘 */}
       <div className='h-7 w-7'>
-        <img
-          src={searchIcon}
-          alt='Search Icon'
-          className='h-full w-full object-contain'
-        />
+        {searchIcon && (
+          <img
+            src={searchIcon}
+            alt='Search Icon'
+            className='h-full w-full object-contain'
+          />
+        )}
       </div>
 
       {/* 검색 공간 */}
