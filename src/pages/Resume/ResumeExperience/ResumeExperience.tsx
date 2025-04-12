@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ResumeExperiencePreviewItem from '../../../components/ResumeExperiencePreviewItem';
 import Stepper from '../../../shared/components/Stepper';
 import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { fetchDevExperiences } from '../../../api/dev-experience';
 
 // Step
 const STEP = [
@@ -15,17 +17,41 @@ const STEP = [
 function ResumeExperience() {
   const navigate = useNavigate();
 
-  const [selectedExp, setSelectedExp] = useState<number | null>(null); // 선택된 경험
+  const [selectedExpId, setSelectedExpId] = useState<number | null>(null); // 선택된 경험
+
+  // 개발 경험 목록 조회 API 호출
+  const {
+    data: devExperiences = [],
+    isLoading: isDevExperiencesLoading,
+    isError: isDevExperiencesError,
+  } = useQuery({
+    queryKey: ['devExperiences'],
+    queryFn: fetchDevExperiences,
+  });
 
   // 경험 선택 핸들러
-  const handleSelectExp = (index: number) => {
-    setSelectedExp(index);
+  const handleSelectExpId = (id: number) => {
+    setSelectedExpId(id);
   };
 
   // 다음 단계로 버튼 핸들러
   const handleNextStepButtonClick = () => {
     navigate('/resume/github');
   };
+
+  // 개발 경험 목록 조회 API 성공 시 실행
+  useEffect(() => {
+    if (devExperiences.length > 0) {
+      console.log('개발 경험 목록 조회 성공', devExperiences);
+    }
+  }, [devExperiences]);
+
+  // 개발 경험 목록 조회 API 실패 시 실행
+  useEffect(() => {
+    if (isDevExperiencesError) {
+      console.error('개발 경험 목록 조회 실패');
+    }
+  }, [isDevExperiencesError]);
 
   return (
     <div className='w-main overflow-hidden'>
@@ -43,12 +69,13 @@ function ResumeExperience() {
 
             {/* 경험 리스트 */}
             <div className='mt-11 flex w-full flex-col gap-7'>
-              {Array.from({ length: 4 }).map((_, idx) => (
+              {devExperiences.map((exp) => (
                 <ResumeExperiencePreviewItem
-                  key={`exp-${idx}`}
-                  index={idx}
-                  selectedExp={selectedExp}
-                  handleSelectExp={() => handleSelectExp(idx)}
+                  key={exp.id}
+                  id={exp.id}
+                  selectedExp={selectedExpId}
+                  handleSelectExpId={() => handleSelectExpId(exp.id)}
+                  devExperience={exp}
                 />
               ))}
             </div>
@@ -57,7 +84,7 @@ function ResumeExperience() {
             <button
               type='button'
               className='bg-main-blue mt-11.75 flex h-15.75 w-full cursor-pointer items-center justify-center rounded-[10px] text-xl font-semibold text-white transition-all duration-200 disabled:cursor-not-allowed disabled:bg-[#87A1E7]'
-              disabled={selectedExp === null}
+              disabled={selectedExpId === null}
               onClick={handleNextStepButtonClick}
             >
               다음 단계로 &gt;
