@@ -8,6 +8,7 @@ import {
   addProjectExperienceById,
   addStackExperienceById,
   fetchProjectExperienceById,
+  updateProjectExperienceById,
 } from '../../api/dev-experience';
 import ExperiencePreviewItem from '../ExperiencePreviewItem';
 import { MdCancel } from 'react-icons/md';
@@ -114,6 +115,10 @@ function ExperienceForm(props: ExperienceFormProps) {
     content: '',
   });
 
+  const [selectedProjectId, setSelectedProjectId] = useState<number | null>(
+    null
+  ); // 선택된 프로젝트 ID
+
   // 프로젝트 등록 API 호출
   const addProjectMutation = useMutation({
     mutationFn: (data: typeof projectForm) =>
@@ -131,6 +136,34 @@ function ExperienceForm(props: ExperienceFormProps) {
     onError: (error) => {
       console.error('프로젝트 등록 실패', error);
       alert('프로젝트 등록에 실패했습니다. 다시 시도해주세요.');
+    },
+  });
+
+  // 프로젝트 수정 API 호출
+  const updateProjectMutation = useMutation({
+    mutationFn: ({
+      selectedProjectId,
+      data,
+    }: {
+      selectedProjectId: number;
+      data: typeof projectForm;
+    }) => updateProjectExperienceById(selectedProjectId, data),
+    onSuccess: (data) => {
+      console.log('프로젝트 수정 성공', data);
+      queryClient.invalidateQueries(); // 캐시 무효화 -> 데이터 갱싼
+
+      // 입력 모드 종료
+      setIsInputMode(false);
+
+      // 입력 폼 초기화
+      resetProjectForm();
+
+      // 수정 모드 종료
+      setIsEditMode(false);
+    },
+    onError: (error) => {
+      console.error('프로젝트 수정 실패', error);
+      alert('프로젝트 수정에 실패했습니다. 다시 시도해주세요.');
     },
   });
 
@@ -176,10 +209,15 @@ function ExperienceForm(props: ExperienceFormProps) {
   // 저장 버튼 클릭 핸들러
   const handleSaveOrAddButtonClick = () => {
     if (isInputMode && isEditMode) {
-      /**
-       * TODO: 프로젝트 수정 API 연동
-       */
-      alert('수정 기능은 아직 구현되지 않았습니다.');
+      if (currentTab === 'project') {
+        // 프로젝트 경험 수정 API 호출
+        updateProjectMutation.mutate({
+          selectedProjectId: selectedProjectId ?? 0,
+          data: projectForm,
+        });
+      } else if (currentTab === 'intern') {
+        alert('인턴 경험 수정 기능은 아직 구현되지 않았습니다.');
+      }
       // 수정 모드 종료
       setIsEditMode(false);
       setIsInputMode(false);
@@ -301,10 +339,13 @@ function ExperienceForm(props: ExperienceFormProps) {
             endDate: res.endDate,
             content: res.content,
           });
+
+          setSelectedProjectId(res.id); // 선택된 프로젝트 ID 업데이트
         })
         .catch((err) => {
           console.error('프로젝트 상세 조회 실패', err);
           alert('프로젝트 상세 조회에 실패했습니다. 다시 시도해주세요.');
+          setSelectedProjectId(null); // 선택된 프로젝트 ID 초기화
         });
     } else if (currentTab === 'intern') {
       /**
@@ -374,6 +415,7 @@ function ExperienceForm(props: ExperienceFormProps) {
     setStackForm((prev) => prev.filter((item) => item !== stack)); // 선택한 스택 삭제
   };
 
+  // 기존 기술 스택 목록 업데이트
   useEffect(() => {
     if (selectedDevExperienceDetail) {
       setExistingStacks(
@@ -392,6 +434,13 @@ function ExperienceForm(props: ExperienceFormProps) {
       resetAllInputForm(); // 입력 폼 초기화
     }
   }, [currentTab]);
+
+  // 수정 모드 종료 시 선택된 프로젝트 ID 초기화
+  useEffect(() => {
+    if (!isEditMode) {
+      setSelectedProjectId(null);
+    }
+  }, [isEditMode]);
 
   return (
     <>

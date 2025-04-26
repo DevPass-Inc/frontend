@@ -72,9 +72,25 @@ export const fetchProjectExperienceById = async (
   return response.data.result;
 };
 
-/**
- * TODO: 프로젝트 경험 수정 API
- */
+// 프로젝트 경험 수정 API
+export const updateProjectExperienceById = async (
+  id: number,
+  updatedProject: {
+    title: string;
+    introduce: string;
+    position: string;
+    startDate: string;
+    endDate: string;
+    content: string;
+  }
+): Promise<Project> => {
+  const response = await api.put<ApiResponse<Project>>(
+    `/developments/projects/${id}`,
+    updatedProject
+  );
+
+  return response.data.result;
+};
 
 /**
  * TODO: 프로젝트 경험 삭제 API
