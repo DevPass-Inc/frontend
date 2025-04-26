@@ -40,7 +40,7 @@ function MainNavItem(props: MainNavItemProps) {
           className='flex h-10 w-10 items-center justify-center rounded-[7px]'
           style={{ backgroundColor: color }}
         >
-          <img src={docIcon} alt='Link Icon' className='h-6 w-6' />
+          {docIcon && <img src={docIcon} alt='Link Icon' className='h-6 w-6' />}
         </div>
 
         {/* 타이틀 */}

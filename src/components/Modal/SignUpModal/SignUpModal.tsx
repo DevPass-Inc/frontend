@@ -1,4 +1,4 @@
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 import closeRoundBlackIcon from '/images/svg/icons/close_round_black.svg';
 import devPassLogoIcon from '/images/svg/logo/devpass_logo.svg';
 import userLightIcon from '/images/svg/icons/user_light.svg';
