@@ -7,6 +7,7 @@ import {
   addInternshipExperienceById,
   addProjectExperienceById,
   addStackExperienceById,
+  deleteProjectExperienceById,
   fetchProjectExperienceById,
   updateProjectExperienceById,
 } from '../../api/dev-experience';
@@ -115,9 +116,10 @@ function ExperienceForm(props: ExperienceFormProps) {
     content: '',
   });
 
+  // 선택된 프로젝트 ID
   const [selectedProjectId, setSelectedProjectId] = useState<number | null>(
     null
-  ); // 선택된 프로젝트 ID
+  );
 
   // 프로젝트 등록 API 호출
   const addProjectMutation = useMutation({
@@ -164,6 +166,28 @@ function ExperienceForm(props: ExperienceFormProps) {
     onError: (error) => {
       console.error('프로젝트 수정 실패', error);
       alert('프로젝트 수정에 실패했습니다. 다시 시도해주세요.');
+    },
+  });
+
+  // 프로젝트 삭제 API 호출
+  const deleteProjectMutation = useMutation({
+    mutationFn: (id: number) => deleteProjectExperienceById(id),
+    onSuccess: () => {
+      console.log('프로젝트 경험 삭제 성공');
+      queryClient.invalidateQueries(); // 캐시 무효화 -> 데이터 갱신
+
+      // 입력 모드 종료
+      setIsInputMode(false);
+
+      // 입력 폼 초기화
+      resetProjectForm();
+
+      // 수정 모드 종료
+      setIsEditMode(false);
+    },
+    onError: (error) => {
+      console.error('프로젝트 경험 삭제 실패', error);
+      alert('프로젝트 경험 삭제에 실패했습니다. 다시 시도해주세요.');
     },
   });
 
@@ -415,6 +439,14 @@ function ExperienceForm(props: ExperienceFormProps) {
     setStackForm((prev) => prev.filter((item) => item !== stack)); // 선택한 스택 삭제
   };
 
+  // 삭제 버튼 클릭 핸들러
+  const handleDeleteButtonClick = () => {
+    if (currentTab === 'project') {
+      // 현재 탭이 프로젝트 탭인 경우
+      deleteProjectMutation.mutate(selectedProjectId ?? 0); // 프로젝트 경험 삭제 API 호출
+    }
+  };
+
   // 기존 기술 스택 목록 업데이트
   useEffect(() => {
     if (selectedDevExperienceDetail) {
@@ -628,17 +660,36 @@ function ExperienceForm(props: ExperienceFormProps) {
         </div>
       )}
 
-      {/* 저장 / 프로젝트 추가 버튼 */}
+      {/* 버튼 모음 */}
       <div className='mt-5 flex w-full items-center justify-end gap-3'>
+        {/* 취소 버튼 */}
         {(isEditMode || isInputMode) && currentTab !== 'stack' && (
           <button
             type='button'
-            className='flex h-10 cursor-pointer items-center justify-center gap-2 rounded border border-solid border-red-500 bg-transparent px-4 font-medium text-red-500 transition-all duration-200 hover:bg-red-50'
+            className='flex h-10 cursor-pointer items-center justify-center gap-2 rounded border border-solid border-gray-300 bg-transparent px-4 font-medium text-gray-700 transition-all duration-200 hover:bg-gray-100'
             onClick={handleCancelButtonClick}
           >
             취소
           </button>
         )}
+
+        {/* 삭제 버튼 */}
+        {isInputMode && isEditMode && (
+          <button
+            type='button'
+            className='flex h-10 cursor-pointer items-center justify-center gap-2 rounded border border-solid border-red-500 bg-transparent px-4 font-medium text-red-500 transition-all duration-200 hover:bg-red-100'
+            onClick={() => {
+              // 삭제 버튼 클릭 시 삭제 확인 모달 표시
+              if (window.confirm('정말 삭제하시겠습니까?')) {
+                handleDeleteButtonClick(); // 삭제 API 호출
+              }
+            }}
+          >
+            삭제
+          </button>
+        )}
+
+        {/* 수정 / 저장 / 추가 버튼 */}
         <ExperienceSaveOrAddButton
           title={isEditMode ? '수정' : isInputMode ? '저장' : '추가'}
           onClick={handleSaveOrAddButtonClick}

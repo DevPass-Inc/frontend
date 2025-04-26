@@ -92,9 +92,13 @@ export const updateProjectExperienceById = async (
   return response.data.result;
 };
 
-/**
- * TODO: 프로젝트 경험 삭제 API
- */
+// 프로젝트 경험 삭제 API
+export const deleteProjectExperienceById = async (
+  id: number
+): Promise<void> => {
+  const response = await api.delete(`/developments/projects/dev/${id}`);
+  console.log('프로젝트 경험 삭제 성공', response.data);
+};
 
 // 기술스택 등록 API
 export const addStackExperienceById = async (
