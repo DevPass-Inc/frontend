@@ -1,4 +1,4 @@
-import axios from 'axios';
+import api from '../lib/axios';
 
 interface Stack {
   stack: string;
@@ -22,8 +22,8 @@ export interface FetchCompanyMatchingResultsResponse {
 // AI 기업 매칭 조회
 export const fetchCompanyMatchingResults = async () => {
   try {
-    const response = await axios.post<FetchCompanyMatchingResultsResponse>(
-      `http://localhost:8080/api/recruitments/ai`,
+    const response = await api.post<FetchCompanyMatchingResultsResponse>(
+      '/recruitments/ai',
       {
         userStacks: ['Java', 'Spring Boot'],
         userResume: 'Java Spring Boot로 API 서버 개발을 해 본 경험이 있습니다.',
