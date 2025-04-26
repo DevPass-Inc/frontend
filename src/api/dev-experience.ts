@@ -115,6 +115,18 @@ export const addStackExperienceById = async (
   return response.data.result;
 };
 
+// 기술스택 수정 API
+export const updateStackExperienceById = async (
+  id: number,
+  stacks: string[]
+): Promise<Stack[]> => {
+  const response = await api.put(`/developments/stacks/${id}`, {
+    stacks,
+  });
+
+  return response.data.result.stacks;
+};
+
 // 인턴십 경험 등록 API
 export const addInternshipExperienceById = async (
   id: number,

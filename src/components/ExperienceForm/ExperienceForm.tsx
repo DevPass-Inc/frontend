@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import ExperienceInputItem from '../../shared/components/ExperienceInputItem';
 import ExperienceSaveOrAddButton from '../../shared/components/ExperienceSaveOrAddButton';
-import { DevExperienceDetail, Stack } from '../../types/dev-experience.types';
-import { use, useEffect, useState } from 'react';
+import { DevExperienceDetail } from '../../types/dev-experience.types';
+import { useEffect, useState } from 'react';
 import {
   addInternshipExperienceById,
   addProjectExperienceById,
@@ -10,9 +10,11 @@ import {
   deleteProjectExperienceById,
   fetchProjectExperienceById,
   updateProjectExperienceById,
+  updateStackExperienceById,
 } from '../../api/dev-experience';
 import ExperiencePreviewItem from '../ExperiencePreviewItem';
-import { MdCancel } from 'react-icons/md';
+import { MdCancel, MdClose } from 'react-icons/md';
+import SkillStackUpdateModal from '../SkillStackUpdateModal';
 
 // 프로젝트 입력 폼 필드
 const PROJECT_FIELDS = [
@@ -95,6 +97,7 @@ function ExperienceForm(props: ExperienceFormProps) {
 
   const [isInputMode, setIsInputMode] = useState<boolean>(false); // 입력 모드 여부
   const [isEditMode, setIsEditMode] = useState<boolean>(false); // 수정 모드 여부
+  const [isStackModalOpen, setIsStackModalOpen] = useState<boolean>(false); // 스택 모달 여부
 
   // 프로젝트 등록 데이터 폼
   const [projectForm, setProjectForm] = useState({
@@ -207,6 +210,23 @@ function ExperienceForm(props: ExperienceFormProps) {
     onError: (error) => {
       console.error('스택 등록 실패', error);
       alert('스택 등록에 실패했습니다. 다시 시도해주세요.');
+    },
+  });
+
+  // 스택 수정 API 호출
+  const updateStackMutation = useMutation({
+    mutationFn: (data: string[]) =>
+      updateStackExperienceById(selectedExpId, data),
+    onSuccess: (data) => {
+      console.log('스택 수정 성공', data);
+      queryClient.invalidateQueries(); // 캐시 무효화 -> 데이터 갱신
+
+      setExistingStacks(data.map((stack) => stack.stack)); // 기존 스택 목록 업데이트
+      setIsStackModalOpen(false); // 스택 수정 모달 닫기
+    },
+    onError: (error) => {
+      console.error('스택 수정 실패', error);
+      alert('스택 수정에 실패했습니다. 다시 시도해주세요.');
     },
   });
 
@@ -447,6 +467,21 @@ function ExperienceForm(props: ExperienceFormProps) {
     }
   };
 
+  // 스택 수정 버튼 클릭 핸들러
+  const handleStackUpdateButtonClick = () => {
+    setIsStackModalOpen(true);
+  };
+
+  // 스택 모달 닫기 핸들러
+  const handleCloseStackModal = () => {
+    setIsStackModalOpen(false);
+  };
+
+  // 스택 수정 모달 확인 핸들러
+  const handleStackUpdateModalConfirm = (updatedStacks: string[]) => {
+    updateStackMutation.mutate(updatedStacks);
+  };
+
   // 기존 기술 스택 목록 업데이트
   useEffect(() => {
     if (selectedDevExperienceDetail) {
@@ -459,6 +494,7 @@ function ExperienceForm(props: ExperienceFormProps) {
   // 탭 변경 시 실행됨
   useEffect(() => {
     if (currentTab === 'stack') {
+      setIsEditMode(false); // 스택 탭 클릭 시 수정 모드 종료
       setIsInputMode(true); // 스택 탭 클릭 시 입력 모드로 전환 (스택 탭은 입력 모드만 존재하기 때문)
     } else {
       setIsInputMode(false); // 탭 변경 시 입력 모드 종료
@@ -689,12 +725,32 @@ function ExperienceForm(props: ExperienceFormProps) {
           </button>
         )}
 
+        {/* 수정 버튼 (스택 탭에서만 사용) */}
+        {currentTab === 'stack' && (
+          <button
+            type='button'
+            className='flex h-10 cursor-pointer items-center justify-center gap-2 rounded border border-solid border-blue-500 bg-transparent px-4 font-medium text-blue-500 transition-all duration-200 hover:bg-blue-100'
+            onClick={handleStackUpdateButtonClick}
+          >
+            수정
+          </button>
+        )}
+
         {/* 수정 / 저장 / 추가 버튼 */}
         <ExperienceSaveOrAddButton
           title={isEditMode ? '수정' : isInputMode ? '저장' : '추가'}
           onClick={handleSaveOrAddButtonClick}
         />
       </div>
+
+      {/* 스택 수정 모달 */}
+      {isStackModalOpen && (
+        <SkillStackUpdateModal
+          existingStacks={existingStacks}
+          onClose={handleCloseStackModal}
+          onConfirm={handleStackUpdateModalConfirm}
+        />
+      )}
     </>
   );
 }
