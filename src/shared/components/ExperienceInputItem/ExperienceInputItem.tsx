@@ -9,7 +9,9 @@ interface ExperienceInputItemProps {
   value: string;
   placeholder?: string;
   isDate?: boolean;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
   onDateChange?: (date: Date | null) => void;
 }
 
@@ -21,7 +23,7 @@ function ExperienceInputItem(props: ExperienceInputItemProps) {
     <div className='flex w-full flex-col gap-1.25'>
       <span className='text-sm leading-4 font-medium'>{label}</span>
       <div
-        className='flex h-10 w-full rounded-[5px]'
+        className={`flex ${name === 'content' ? 'h-28' : 'h-10'} w-full rounded-[5px]`}
         style={{ border: '1px solid #898989B2' }}
       >
         {isDate ? (
@@ -37,6 +39,14 @@ function ExperienceInputItem(props: ExperienceInputItemProps) {
             placeholderText={placeholder}
             className='text-main h-full w-full cursor-pointer bg-transparent px-3 text-sm outline-none'
             isClearable
+          />
+        ) : name === 'content' ? (
+          <textarea
+            placeholder={placeholder}
+            className='text-main h-full w-full resize-none bg-transparent px-3 py-2 text-sm outline-none'
+            name={name}
+            value={value}
+            onChange={onChange}
           />
         ) : (
           <input

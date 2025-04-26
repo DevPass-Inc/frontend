@@ -7,6 +7,11 @@ import SignUpModal from '../../../components/Modal/SignUpModal';
 function NavigationBar() {
   const [isSignUpModalOpen, setIsSignUpModalOpen] = useState<boolean>(false);
 
+  // 로그인 버튼 클릭 이벤트
+  const handleLoginButtonClick = () => {
+    window.location.href = 'http://localhost:8080/oauth2/authorization/github';
+  };
+
   // 회원가입 버튼 클릭 이벤트
   const handleSignUpButtonClick = () => {
     setIsSignUpModalOpen(true);
@@ -32,16 +37,17 @@ function NavigationBar() {
           <button
             type='button'
             className='text-main-gray flex h-full w-20 cursor-pointer items-center justify-center rounded bg-transparent text-sm font-medium'
+            onClick={handleLoginButtonClick}
           >
             로그인
           </button>
-          <button
+          {/* <button
             type='button'
             className='text-main-gray flex h-full w-20 cursor-pointer items-center justify-center rounded bg-transparent text-sm font-medium'
             onClick={handleSignUpButtonClick}
           >
             회원가입
-          </button>
+          </button> */}
         </div>
       </div>
 
