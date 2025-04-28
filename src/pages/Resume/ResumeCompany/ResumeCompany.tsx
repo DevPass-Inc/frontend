@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Dropdown from '../../../shared/components/Dropdown';
 import JobPost from '../../../shared/components/JobPost';
 import Pagination from '../../../shared/components/Pagination';
@@ -18,6 +18,7 @@ const STEP = [
 ];
 
 function ResumeCompany() {
+  const navigate = useNavigate();
   const { selectedExpId, githubInfo } = useLocation().state; // 선택된 경험 ID, 깃허브 정보 가져오기
 
   // 선택된 채용공고 ID
@@ -41,13 +42,18 @@ function ResumeCompany() {
   });
 
   // 채용공고 클릭 핸들러
-  const handleRecruitmentItemClick = (recruitmentId: number = 5) => {
+  const handleRecruitmentItemClick = (recruitmentId: number = 6) => {
     setSelectedRecruitmentId(recruitmentId);
   };
 
   useEffect(() => {
     if (recruitments) {
       console.log('채용공고 상세 조회 성공', recruitments);
+
+      // 채용공고 상세 조회 성공 후 페이지 이동
+      navigate(`/resume/company/${recruitments.recruitmentId}`, {
+        state: { selectedExpId, githubInfo, recruitments },
+      });
     }
   }, [recruitments]);
 
