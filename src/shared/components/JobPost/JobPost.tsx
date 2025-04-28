@@ -1,15 +1,20 @@
-import { Link } from 'react-router-dom';
 import sampleLogo from '/images/sample/sample_logo.png';
 import careerIcon from '/images/svg/icons/career.svg';
 import locationIcon from '/images/svg/icons/location.svg';
 
-function JobPost() {
+interface JobPostProps {
+  onClick: () => void;
+}
+
+function JobPost(props: JobPostProps) {
+  const { onClick } = props;
+
   return (
     <div className='h-full w-full p-2.5'>
       {/* 기업 공고 */}
-      <Link
-        to={'/'}
-        className='flex h-full w-full items-start gap-5 rounded-[5px] border border-solid border-[#DAD9D9] bg-white p-3.75'
+      <div
+        className='flex h-full w-full cursor-pointer items-start gap-5 rounded-[5px] border border-solid border-[#DAD9D9] bg-white p-3.75'
+        onClick={onClick}
       >
         {/* 로고 */}
         <div className='h-20 w-20'>
@@ -83,7 +88,7 @@ function JobPost() {
             </div>
           </div>
         </div>
-      </Link>
+      </div>
     </div>
   );
 }
