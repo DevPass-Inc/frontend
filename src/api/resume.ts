@@ -1,4 +1,5 @@
 import api from '../lib/axios';
+import { ApiResponse } from '../types/dev-experience.types';
 
 interface ResumeDetail {
   name: string;
@@ -8,9 +9,13 @@ interface ResumeDetail {
   github: string;
   blog: string;
   summary: string[];
+  experience: ResumeExperience[];
+  activities: ResumeActivity[];
+  skills: ResumeSkill[];
+  education: ResumeEducation[];
 }
 
-interface ResumeExperience {
+export interface ResumeExperience {
   project: string;
   summary: string;
   position: string;
@@ -40,10 +45,6 @@ interface Resume {
   id: string;
   userId: number;
   resume: ResumeDetail;
-  experience: ResumeExperience[];
-  activities: ResumeActivity[];
-  skills: ResumeSkill[];
-  education: ResumeEducation[];
 }
 
 // 이력서 생성 및 저장 API
@@ -52,9 +53,9 @@ export const generateResumeByDevExpIdAndRecrId = async (
   recruitmentId: number,
   includeGithub: boolean = true
 ): Promise<Resume> => {
-  const response = await api.get<Resume>(
+  const response = await api.get<ApiResponse<Resume>>(
     `/resume/generate/${devExperienceId}/${recruitmentId}?includeGithub=${includeGithub}`
   );
 
-  return response.data;
+  return response.data.result;
 };
