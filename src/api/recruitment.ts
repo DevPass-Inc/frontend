@@ -20,7 +20,7 @@ export interface FetchCompanyMatchingResultsResponse {
   result: CompanyMatchingResultItem[];
 }
 
-export interface Recruitment {
+export interface RecruitmentDetail {
   recruitmentId: number;
   companyName: string;
   position: string;
@@ -32,6 +32,45 @@ export interface Recruitment {
   benefit: string;
   deadline: string;
   imageUrl: string;
+}
+
+export interface RecruitmentListContent {
+  id: number;
+  imageUrl: string;
+  companyName: string;
+  position: string;
+  career: string;
+  location: string;
+  stacks: string[];
+}
+
+export interface RecruitmentList {
+  totalPages: number;
+  totalElements: number;
+  size: number;
+  content: RecruitmentListContent[];
+  number: number;
+  sort: {
+    empty: boolean;
+    sorted: boolean;
+    unsorted: boolean;
+  };
+  pageable: {
+    offset: number;
+    sort: {
+      empty: boolean;
+      sorted: boolean;
+      unsorted: boolean;
+    };
+    paged: boolean;
+    pageNumber: number;
+    pageSize: number;
+    unpaged: boolean;
+  };
+  numberOfElements: number;
+  last: boolean;
+  first: boolean;
+  empty: boolean;
 }
 
 // AI 기업 매칭 조회
@@ -54,11 +93,31 @@ export const fetchCompanyMatchingResults = async () => {
   }
 };
 
+// 채용공고 리스트 조회 API
+export const fetchRecruitmentList = async (
+  page: number = 1,
+  size: number = 8,
+  direction: string = 'ASC'
+): Promise<RecruitmentList> => {
+  const response = await api.get<ApiResponse<RecruitmentList>>(
+    `/recruitments`,
+    {
+      params: {
+        page,
+        size,
+        direction,
+      },
+    }
+  );
+
+  return response.data.result;
+};
+
 // 채용공고 상세 조회 API
 export const fetchRecruitmentDetailById = async (
   id: number
-): Promise<Recruitment> => {
-  const response = await api.get<ApiResponse<Recruitment>>(
+): Promise<RecruitmentDetail> => {
+  const response = await api.get<ApiResponse<RecruitmentDetail>>(
     `/recruitments/${id}`
   );
 

@@ -5,7 +5,10 @@ import Pagination from '../../../shared/components/Pagination';
 import SearchItem from '../../../shared/components/SearchItem';
 import Stepper from '../../../shared/components/Stepper';
 import { useQuery } from '@tanstack/react-query';
-import { fetchRecruitmentDetailById } from '../../../api/recruitment';
+import {
+  fetchRecruitmentDetailById,
+  fetchRecruitmentList,
+} from '../../../api/recruitment';
 import { useEffect, useState } from 'react';
 
 // Step
@@ -27,8 +30,16 @@ function ResumeCompany() {
   >(null);
 
   /**
-   * TODO: 채용공고 전체 조회 API 연동
+   * TODO: 채용공고 리스트 조회 API 연동
    */
+  const {
+    data: recruitmentList,
+    isLoading: isRecruitmentListLoading,
+    isError: isRecruitmentListError,
+  } = useQuery({
+    queryKey: ['recruitmentList'],
+    queryFn: () => fetchRecruitmentList(),
+  });
 
   // 채용공고 상세 조회 API 호출
   const {
@@ -45,6 +56,12 @@ function ResumeCompany() {
   const handleRecruitmentItemClick = (recruitmentId: number = 6) => {
     setSelectedRecruitmentId(recruitmentId);
   };
+
+  useEffect(() => {
+    if (recruitmentList) {
+      console.log('채용공고 리스트 조회 성공', recruitmentList);
+    }
+  }, [recruitmentList]);
 
   useEffect(() => {
     if (recruitments) {
@@ -94,10 +111,11 @@ function ResumeCompany() {
           {/* 기업 공고 그리드 */}
           <div className='mt-10.5 flex w-full flex-col items-center'>
             <div className='grid h-139 w-250 grid-cols-2 grid-rows-4'>
-              {Array.from({ length: 8 }).map((_, index) => (
+              {recruitmentList?.content.map((recruitment) => (
                 <JobPost
-                  key={index}
-                  onClick={() => handleRecruitmentItemClick()}
+                  key={recruitment.id}
+                  recruitment={recruitment}
+                  onClick={() => handleRecruitmentItemClick(recruitment.id)}
                 />
               ))}
             </div>
