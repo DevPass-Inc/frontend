@@ -2,6 +2,12 @@ import Stepper from '../../../shared/components/Stepper';
 import saveIcon from '/images/svg/icons/save.svg';
 import sampleCompanyLogoIcon from '/images/sample/sample_company_logo.png';
 import ResumeProjectItem from '../../../components/ResumeProjectItem';
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import { GithubInfo } from '../../../api/github';
+import { Recruitment } from '../../../api/recruitment';
+import { useQuery } from '@tanstack/react-query';
+import { generateResumeByDevExpIdAndRecrId } from '../../../api/resume';
 
 // Step
 const STEP = [
@@ -13,6 +19,30 @@ const STEP = [
 ];
 
 function ResumeCreate() {
+  const { selectedExpId, githubInfo, recruitmentId } = useLocation().state as {
+    selectedExpId: number;
+    githubInfo: GithubInfo | null;
+    recruitmentId: number;
+  };
+
+  // 이력서 생성 API 호출
+  const {
+    data: resume,
+    isLoading: isResumeLoading,
+    isError: isResumeError,
+  } = useQuery({
+    queryKey: ['resume', selectedExpId, recruitmentId, githubInfo],
+    queryFn: () =>
+      generateResumeByDevExpIdAndRecrId(selectedExpId, recruitmentId),
+    enabled: !!selectedExpId && !!recruitmentId,
+  });
+
+  useEffect(() => {
+    if (resume) {
+      console.log('이력서 생성 성공', resume);
+    }
+  }, [resume]);
+
   return (
     <div className='w-main overflow-hidden'>
       <div className='mt-8.75 mb-12.75'>

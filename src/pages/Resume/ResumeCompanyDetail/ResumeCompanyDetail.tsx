@@ -1,12 +1,26 @@
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Recruitment } from '../../../api/recruitment';
 import { GithubInfo } from '../../../api/github';
 
 function ResumeCompanyDetail() {
+  const navigate = useNavigate();
+
   const { selectedExpId, githubInfo, recruitments } = useLocation().state as {
     selectedExpId: number;
     githubInfo: GithubInfo | null;
     recruitments: Recruitment;
+  };
+
+  // 이 기업 선택하기 버튼 클릭 핸들러
+  const handleSelectCompanyButtonClick = () => {
+    // 페이지 이동 및 상태 전달
+    navigate('/resume/create', {
+      state: {
+        selectedExpId,
+        githubInfo,
+        recruitmentId: recruitments.recruitmentId,
+      },
+    });
   };
 
   return (
@@ -103,7 +117,10 @@ function ResumeCompanyDetail() {
               </div>
 
               {/* 이 기업 선택하기 버튼 */}
-              <button className='bg-main-blue mt-4 w-full cursor-pointer rounded-sm py-2 text-white'>
+              <button
+                className='bg-main-blue mt-4 w-full cursor-pointer rounded-sm py-2 text-white'
+                onClick={handleSelectCompanyButtonClick}
+              >
                 이 기업 선택하기
               </button>
             </div>
