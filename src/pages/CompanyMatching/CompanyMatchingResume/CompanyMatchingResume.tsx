@@ -1,11 +1,23 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ResumePreviewItem from '../../../components/ResumePreviewItem';
 import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { fetchResumeList } from '../../../api/resume';
 
 function CompanyMatchingResume() {
   const navigate = useNavigate();
 
   const [selectedResume, setSelectedResume] = useState<number | null>(null); // 선택된 이력서 인덱스
+
+  // 이력서 리스트 API 호출
+  const {
+    data: resumeList = [],
+    isLoading: isResumeListLoading,
+    isError: isResumeListError,
+  } = useQuery({
+    queryKey: ['resumeList'],
+    queryFn: () => fetchResumeList(),
+  });
 
   // 이력서 선택 핸들러
   const handleSelectResume = (index: number) => {
@@ -16,6 +28,12 @@ function CompanyMatchingResume() {
   const handleCompanyMatching = () => {
     navigate('/company/matching/result');
   };
+
+  useEffect(() => {
+    if (resumeList) {
+      console.log('이력서 리스트 조회 성공', resumeList);
+    }
+  }, [resumeList]);
 
   return (
     <div className='w-main overflow-hidden'>
@@ -32,13 +50,14 @@ function CompanyMatchingResume() {
           </div>
 
           {/* 이력서 리스트 */}
-          <div className='flex w-full flex-wrap justify-center gap-5'>
-            {Array.from({ length: 4 }).map((_, index) => (
+          <div className='flex max-h-[500px] w-full flex-wrap justify-center gap-5 overflow-y-auto'>
+            {resumeList.map((resume, index) => (
               <ResumePreviewItem
                 key={`resume-preview-${index}`}
                 index={index}
                 selectedResume={selectedResume}
                 handleSelectResume={handleSelectResume}
+                resume={resume}
               />
             ))}
           </div>
