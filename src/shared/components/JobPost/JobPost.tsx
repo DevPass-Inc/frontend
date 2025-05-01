@@ -19,11 +19,11 @@ function JobPost(props: JobPostProps) {
         onClick={onClick}
       >
         {/* 로고 */}
-        <div className='h-20 w-20'>
+        <div className='h-20 w-20 overflow-hidden rounded-lg'>
           <img
             src={recruitment?.imageUrl}
             alt='Company Logo'
-            className='h-full w-full object-contain'
+            className='h-full w-full object-cover'
           />
         </div>
 

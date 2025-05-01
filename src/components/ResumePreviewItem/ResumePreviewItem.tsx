@@ -2,22 +2,21 @@ import { Resume } from '../../api/resume';
 import checkBlueIcon from '/images/svg/icons/check_blue.svg';
 
 interface ResumePreviewItemProps {
-  index: number;
-  selectedResume: number | null;
-  handleSelectResume: (index: number) => void;
+  selectedResume: string | null;
+  handleSelectResume: (resumeId: string) => void;
   resume: Resume;
 }
 
 function ResumePreviewItem(props: ResumePreviewItemProps) {
-  const { index, selectedResume, handleSelectResume, resume } = props;
+  const { selectedResume, handleSelectResume, resume } = props;
 
   return (
     <div
-      className={`${selectedResume === index ? 'border-[#3B81F6]' : 'border-[#DFDFDF] hover:bg-cyan-50'} relative flex h-65 w-130 cursor-pointer flex-col items-start overflow-hidden rounded-[10px] border-2 border-solid bg-white px-8 pt-5.75 pb-5 transition-all duration-200`}
-      onClick={() => handleSelectResume(index)}
+      className={`${selectedResume === resume.id ? 'border-[#3B81F6]' : 'border-[#DFDFDF] hover:bg-cyan-50'} relative flex h-65 w-130 cursor-pointer flex-col items-start overflow-hidden rounded-[10px] border-2 border-solid bg-white px-8 pt-5.75 pb-5 transition-all duration-200`}
+      onClick={() => handleSelectResume(resume.id)}
     >
       {/* 체크 아이콘 (선택됨) */}
-      {selectedResume === index && (
+      {selectedResume === resume.id && (
         <img
           src={checkBlueIcon}
           alt='Selected Resume'

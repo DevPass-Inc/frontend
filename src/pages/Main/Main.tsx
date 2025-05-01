@@ -4,6 +4,7 @@ import MainNavItem from '../../shared/components/MainNavItem';
 import SearchBar from '../../shared/components/SearchBar';
 import { fetchRecruitmentList } from '../../api/recruitment';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // COLORS 정의
 const COLORS = {
@@ -58,7 +59,9 @@ function Main() {
   return (
     <div className='flex w-full flex-col items-center overflow-hidden'>
       {/* 배너 */}
-      <div className='h-100.25 w-full bg-black'></div>
+      <div className='flex h-100.25 w-full items-center justify-center bg-black font-bold text-white'>
+        배너
+      </div>
 
       {/* 메인 컨텐츠 */}
       <div className='w-main'>

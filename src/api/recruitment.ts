@@ -13,13 +13,6 @@ export interface CompanyMatchingResultItem {
   stacks: Stack[];
 }
 
-export interface FetchCompanyMatchingResultsResponse {
-  httpStatus: string;
-  code: string;
-  message: string;
-  result: CompanyMatchingResultItem[];
-}
-
 export interface RecruitmentDetail {
   recruitmentId: number;
   companyName: string;
@@ -74,23 +67,17 @@ export interface RecruitmentList {
 }
 
 // AI 기업 매칭 조회
-export const fetchCompanyMatchingResults = async () => {
-  try {
-    const response = await api.post<FetchCompanyMatchingResultsResponse>(
-      '/recruitments/ai',
-      {
-        userStacks: ['Java', 'Spring Boot'],
-        userResume: 'Java Spring Boot로 API 서버 개발을 해 본 경험이 있습니다.',
-      }
-    );
+export const fetchCompanyMatchingResults = async (
+  resumeId: string
+): Promise<CompanyMatchingResultItem[]> => {
+  const response = await api.post<ApiResponse<CompanyMatchingResultItem[]>>(
+    '/recruitments/recommendations',
+    {
+      resume_id: resumeId,
+    }
+  );
 
-    console.log(response.data.result);
-
-    return response.data;
-  } catch (err) {
-    console.error(err);
-    throw new Error('기업 매칭 결과 조회에 실패했습니다.');
-  }
+  return response.data.result;
 };
 
 // 채용공고 리스트 조회 API

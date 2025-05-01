@@ -29,9 +29,7 @@ function ResumeCompany() {
     number | null
   >(null);
 
-  /**
-   * TODO: 채용공고 리스트 조회 API 연동
-   */
+  // 채용공고 리스트 조회 API 호출
   const {
     data: recruitmentList,
     isLoading: isRecruitmentListLoading,
@@ -53,7 +51,7 @@ function ResumeCompany() {
   });
 
   // 채용공고 클릭 핸들러
-  const handleRecruitmentItemClick = (recruitmentId: number = 6) => {
+  const handleRecruitmentItemClick = (recruitmentId: number) => {
     setSelectedRecruitmentId(recruitmentId);
   };
 
