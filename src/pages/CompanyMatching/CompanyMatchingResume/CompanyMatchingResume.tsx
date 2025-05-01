@@ -1,21 +1,41 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ResumePreviewItem from '../../../components/ResumePreviewItem';
 import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { fetchResumeList } from '../../../api/resume';
 
 function CompanyMatchingResume() {
   const navigate = useNavigate();
 
-  const [selectedResume, setSelectedResume] = useState<number | null>(null); // 선택된 이력서 인덱스
+  const [selectedResume, setSelectedResume] = useState<string | null>(null); // 선택된 이력서 ID
+
+  // 이력서 리스트 API 호출
+  const {
+    data: resumeList = [],
+    isLoading: isResumeListLoading,
+    isError: isResumeListError,
+  } = useQuery({
+    queryKey: ['resumeList'],
+    queryFn: () => fetchResumeList(),
+  });
 
   // 이력서 선택 핸들러
-  const handleSelectResume = (index: number) => {
-    setSelectedResume(index);
+  const handleSelectResume = (resumeId: string) => {
+    setSelectedResume(resumeId);
   };
 
   // 기업 매칭하기 버튼 클릭 핸들러
   const handleCompanyMatching = () => {
-    navigate('/company/matching/result');
+    navigate('/company/matching/result', {
+      state: { selectedResume },
+    });
   };
+
+  useEffect(() => {
+    if (resumeList) {
+      console.log('이력서 리스트 조회 성공', resumeList);
+    }
+  }, [resumeList]);
 
   return (
     <div className='w-main overflow-hidden'>
@@ -32,15 +52,17 @@ function CompanyMatchingResume() {
           </div>
 
           {/* 이력서 리스트 */}
-          <div className='flex w-full flex-wrap justify-center gap-5'>
-            {Array.from({ length: 4 }).map((_, index) => (
-              <ResumePreviewItem
-                key={`resume-preview-${index}`}
-                index={index}
-                selectedResume={selectedResume}
-                handleSelectResume={handleSelectResume}
-              />
-            ))}
+          <div className='relative max-h-[500px] w-full overflow-y-auto'>
+            <div className='flex flex-wrap justify-center gap-5 pr-2'>
+              {resumeList.map((resume, index) => (
+                <ResumePreviewItem
+                  key={`resume-preview-${index}`}
+                  selectedResume={selectedResume}
+                  handleSelectResume={() => handleSelectResume(resume.id)}
+                  resume={resume}
+                />
+              ))}
+            </div>
           </div>
 
           {/* 기업 매칭하기 버튼 */}

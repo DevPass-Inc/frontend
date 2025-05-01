@@ -1,8 +1,15 @@
+import { useLocation, useNavigate } from 'react-router-dom';
 import Dropdown from '../../../shared/components/Dropdown';
 import JobPost from '../../../shared/components/JobPost';
 import Pagination from '../../../shared/components/Pagination';
 import SearchItem from '../../../shared/components/SearchItem';
 import Stepper from '../../../shared/components/Stepper';
+import { useQuery } from '@tanstack/react-query';
+import {
+  fetchRecruitmentDetailById,
+  fetchRecruitmentList,
+} from '../../../api/recruitment';
+import { useEffect, useState } from 'react';
 
 // Step
 const STEP = [
@@ -14,6 +21,57 @@ const STEP = [
 ];
 
 function ResumeCompany() {
+  const navigate = useNavigate();
+  const { selectedExpId, githubInfo } = useLocation().state; // 선택된 경험 ID, 깃허브 정보 가져오기
+
+  // 선택된 채용공고 ID
+  const [selectedRecruitmentId, setSelectedRecruitmentId] = useState<
+    number | null
+  >(null);
+
+  // 채용공고 리스트 조회 API 호출
+  const {
+    data: recruitmentList,
+    isLoading: isRecruitmentListLoading,
+    isError: isRecruitmentListError,
+  } = useQuery({
+    queryKey: ['recruitmentList'],
+    queryFn: () => fetchRecruitmentList(),
+  });
+
+  // 채용공고 상세 조회 API 호출
+  const {
+    data: recruitments,
+    isLoading: isRecruitmentsLoading,
+    isError: isRecruitmentsError,
+  } = useQuery({
+    queryKey: ['recruitments', selectedRecruitmentId],
+    queryFn: () => fetchRecruitmentDetailById(selectedRecruitmentId!),
+    enabled: !!selectedRecruitmentId, // 선택된 채용공고 ID가 없으면 채용공고 조회 API 호출하지 않음
+  });
+
+  // 채용공고 클릭 핸들러
+  const handleRecruitmentItemClick = (recruitmentId: number) => {
+    setSelectedRecruitmentId(recruitmentId);
+  };
+
+  useEffect(() => {
+    if (recruitmentList) {
+      console.log('채용공고 리스트 조회 성공', recruitmentList);
+    }
+  }, [recruitmentList]);
+
+  useEffect(() => {
+    if (recruitments) {
+      console.log('채용공고 상세 조회 성공', recruitments);
+
+      // 채용공고 상세 조회 성공 후 페이지 이동
+      navigate(`/resume/company/${recruitments.recruitmentId}`, {
+        state: { selectedExpId, githubInfo, recruitments },
+      });
+    }
+  }, [recruitments]);
+
   return (
     <div className='w-main overflow-hidden'>
       <div className='mt-8.75 mb-12'>
@@ -51,14 +109,13 @@ function ResumeCompany() {
           {/* 기업 공고 그리드 */}
           <div className='mt-10.5 flex w-full flex-col items-center'>
             <div className='grid h-139 w-250 grid-cols-2 grid-rows-4'>
-              <JobPost />
-              <JobPost />
-              <JobPost />
-              <JobPost />
-              <JobPost />
-              <JobPost />
-              <JobPost />
-              <JobPost />
+              {recruitmentList?.content.map((recruitment) => (
+                <JobPost
+                  key={recruitment.id}
+                  recruitment={recruitment}
+                  onClick={() => handleRecruitmentItemClick(recruitment.id)}
+                />
+              ))}
             </div>
           </div>
 

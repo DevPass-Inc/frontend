@@ -1,22 +1,29 @@
-import { Link } from 'react-router-dom';
+import { RecruitmentListContent } from '../../../api/recruitment';
 import sampleLogo from '/images/sample/sample_logo.png';
 import careerIcon from '/images/svg/icons/career.svg';
 import locationIcon from '/images/svg/icons/location.svg';
 
-function JobPost() {
+interface JobPostProps {
+  onClick: () => void;
+  recruitment: RecruitmentListContent;
+}
+
+function JobPost(props: JobPostProps) {
+  const { onClick, recruitment } = props;
+
   return (
     <div className='h-full w-full p-2.5'>
       {/* 기업 공고 */}
-      <Link
-        to={'/'}
-        className='flex h-full w-full items-start gap-5 rounded-[5px] border border-solid border-[#DAD9D9] bg-white p-3.75'
+      <div
+        className='flex h-full w-full cursor-pointer items-start gap-5 rounded-[5px] border border-solid border-[#DAD9D9] bg-white p-3.75'
+        onClick={onClick}
       >
         {/* 로고 */}
-        <div className='h-20 w-20'>
+        <div className='h-20 w-20 overflow-hidden rounded-lg'>
           <img
-            src={sampleLogo}
+            src={recruitment?.imageUrl}
             alt='Company Logo'
-            className='h-full w-full object-contain'
+            className='h-full w-full object-cover'
           />
         </div>
 
@@ -24,14 +31,14 @@ function JobPost() {
         <div className='flex flex-col items-start gap-2'>
           {/* 직무 */}
           <h1 className='font-noto text-sm leading-[19.07px] font-semibold'>
-            안드로이드 개발자(Android Developer)
+            {recruitment?.position}
           </h1>
 
           {/* 회사명 & 응답 속도 */}
           <div className='flex items-center gap-1.5'>
             {/* 회사명 */}
             <h2 className='text-xxs leading-[13.62px] font-semibold text-[#898989]'>
-              알고케어
+              {recruitment?.companyName}
             </h2>
 
             {/* 응답 속도 */}
@@ -50,7 +57,7 @@ function JobPost() {
                 className='h-4 w-4 object-contain'
               />
               <h3 className='font-noto text-xxxs font-semibold text-[#898989]'>
-                3 ~ 7년
+                {recruitment?.career}
               </h3>
             </div>
 
@@ -62,28 +69,29 @@ function JobPost() {
                 className='h-4 w-4 object-contain'
               />
               <h3 className='font-noto text-xxxs font-semibold text-[#898989]'>
-                서울 중구
+                {recruitment?.location}
               </h3>
             </div>
           </div>
 
           {/* 태그 */}
           <div className='flex h-4 items-center gap-2.5'>
-            <div className='text-xxxs flex h-full items-center justify-center rounded-[3px] bg-[#E2E2E2] px-1.25 font-semibold text-[#333D4B]'>
-              안드로이드
-            </div>
-            <div className='text-xxxs flex h-full items-center justify-center rounded-[3px] bg-[#E2E2E2] px-1.25 font-semibold text-[#333D4B]'>
-              사물인터넷(IoT)
-            </div>
-            <div className='text-xxxs flex h-full items-center justify-center rounded-[3px] bg-[#E2E2E2] px-1.25 font-semibold text-[#333D4B]'>
-              Android
-            </div>
-            <div className='text-xxxs flex h-full items-center justify-center rounded-[3px] bg-[#E2E2E2] px-1.25 font-semibold text-[#333D4B]'>
-              외 2개
-            </div>
+            {recruitment?.stacks.slice(0, 3).map((stack, idx) => (
+              <div
+                key={idx}
+                className='text-xxxs flex h-full items-center justify-center rounded-[3px] bg-[#E2E2E2] px-1.25 font-semibold text-[#333D4B]'
+              >
+                {stack}
+              </div>
+            ))}
+            {recruitment?.stacks.length > 3 && (
+              <div className='text-xxxs flex h-full items-center justify-center rounded-[3px] bg-[#E2E2E2] px-1.25 font-semibold text-[#333D4B]'>
+                외 {recruitment?.stacks.length - 3}개
+              </div>
+            )}
           </div>
         </div>
-      </Link>
+      </div>
     </div>
   );
 }

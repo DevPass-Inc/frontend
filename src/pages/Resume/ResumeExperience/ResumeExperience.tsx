@@ -36,7 +36,8 @@ function ResumeExperience() {
 
   // 다음 단계로 버튼 핸들러
   const handleNextStepButtonClick = () => {
-    navigate('/resume/github');
+    // 다음 단계로 이동 및 선택된 경험 ID 전달
+    navigate('/resume/github', { state: { selectedExpId } });
   };
 
   // 개발 경험 목록 조회 API 성공 시 실행
