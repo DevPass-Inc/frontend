@@ -59,9 +59,9 @@ function Main() {
   return (
     <div className='flex w-full flex-col items-center overflow-hidden'>
       {/* 배너 */}
-      <div className='flex h-100.25 w-full items-center justify-center bg-black font-bold text-white'>
+      {/* <div className='flex h-100.25 w-full items-center justify-center bg-black font-bold text-white'>
         배너
-      </div>
+      </div> */}
 
       {/* 메인 컨텐츠 */}
       <div className='w-main'>
