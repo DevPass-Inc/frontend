@@ -72,13 +72,33 @@ export const fetchProjectExperienceById = async (
   return response.data.result;
 };
 
-/**
- * TODO: 프로젝트 경험 수정 API
- */
+// 프로젝트 경험 수정 API
+export const updateProjectExperienceById = async (
+  id: number,
+  updatedProject: {
+    title: string;
+    introduce: string;
+    position: string;
+    startDate: string;
+    endDate: string;
+    content: string;
+  }
+): Promise<Project> => {
+  const response = await api.put<ApiResponse<Project>>(
+    `/developments/projects/${id}`,
+    updatedProject
+  );
 
-/**
- * TODO: 프로젝트 경험 삭제 API
- */
+  return response.data.result;
+};
+
+// 프로젝트 경험 삭제 API
+export const deleteProjectExperienceById = async (
+  id: number
+): Promise<void> => {
+  const response = await api.delete(`/developments/projects/dev/${id}`);
+  console.log('프로젝트 경험 삭제 성공', response.data);
+};
 
 // 기술스택 등록 API
 export const addStackExperienceById = async (
@@ -93,6 +113,18 @@ export const addStackExperienceById = async (
   );
 
   return response.data.result;
+};
+
+// 기술스택 수정 API
+export const updateStackExperienceById = async (
+  id: number,
+  stacks: string[]
+): Promise<Stack[]> => {
+  const response = await api.put(`/developments/stacks/${id}`, {
+    stacks,
+  });
+
+  return response.data.result.stacks;
 };
 
 // 인턴십 경험 등록 API
