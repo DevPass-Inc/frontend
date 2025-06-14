@@ -86,7 +86,7 @@ function ExperienceItemNew(props: ExperienceItemNewProps) {
       {/* 저장 버튼 */}
       <button
         type='button'
-        className='flex h-8.5 w-16 cursor-pointer items-center justify-center rounded-[5px] border border-solid border-[#B2B2B2] bg-white text-base font-semibold text-[#1E1E1E] transition-all duration-200 hover:border-[#2463EB] hover:bg-[#F0F9FF] hover:text-[#2463EB] active:bg-[#E0F2FE] active:text-[#1E1E1E]'
+        className='flex h-8.5 w-16 cursor-pointer items-center justify-center rounded-[5px] border border-solid border-[#B2B2B2] bg-white text-base font-semibold text-[#1E1E1E] transition-all duration-200 ease-in-out hover:border-[#2463EB] hover:bg-[#F0F9FF] hover:text-[#2463EB] active:scale-[0.97] active:bg-[#E0F2FE]'
         onClick={handleSaveButtonClick}
       >
         저장
@@ -95,7 +95,7 @@ function ExperienceItemNew(props: ExperienceItemNewProps) {
       {/* 취소 버튼 */}
       <button
         type='button'
-        className='absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 cursor-pointer rounded-full p-1.5'
+        className='absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full p-1.5'
         onClick={onCancel}
       >
         <MdCancel

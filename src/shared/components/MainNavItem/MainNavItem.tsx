@@ -31,13 +31,13 @@ function MainNavItem(props: MainNavItemProps) {
   return (
     <Link
       to={link}
-      className='border-main shadow-main flex h-full w-85.25 flex-col justify-between rounded-[10px] border-[3px] border-solid bg-white px-5.25 py-4.75'
+      className='border-main flex h-full w-85.25 flex-col justify-between rounded-[10px] border-[3px] border-solid bg-white px-5.25 py-4.75 shadow-sm transition-transform duration-300 hover:scale-[1.03]'
     >
       {/* 아이콘 & 타이틀 */}
       <div className='flex items-center gap-3.5'>
         {/* 아이콘 */}
         <div
-          className='flex h-10 w-10 items-center justify-center rounded-[7px]'
+          className='flex h-10 w-10 items-center justify-center rounded-[7px] transition-transform duration-300 hover:rotate-[10deg]'
           style={{ backgroundColor: color }}
         >
           {docIcon && <img src={docIcon} alt='Link Icon' className='h-6 w-6' />}

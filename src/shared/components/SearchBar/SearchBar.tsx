@@ -11,7 +11,7 @@ function SearchBar(props: SearchBarProps) {
 
   return (
     <div
-      className='border-main-gray flex items-center justify-between rounded-[15px] border border-solid bg-white pr-5 pl-6.25'
+      className='border-main-gray focus-within:border-main-blue flex items-center justify-between rounded-[15px] border border-solid bg-white pr-5 pl-6.25 transition-all duration-300'
       style={{ width: `${width}px`, height: `${height}px` }}
     >
       <input

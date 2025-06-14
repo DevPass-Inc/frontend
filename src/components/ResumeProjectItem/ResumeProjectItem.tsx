@@ -1,4 +1,5 @@
 import { ResumeExperience } from '../../api/resume';
+import { motion } from 'framer-motion';
 
 interface ResumeProjectItemProps {
   project: ResumeExperience;
@@ -8,7 +9,13 @@ function ResumeProjectItem(props: ResumeProjectItemProps) {
   const { project } = props;
 
   return (
-    <div className='flex w-full flex-col rounded-[10px] border border-solid border-[#DFDFDF] bg-white px-5.5 pt-6 pb-4.5'>
+    <motion.div
+      className='flex w-full cursor-pointer flex-col rounded-[10px] border border-solid border-[#DFDFDF] bg-white px-5.5 pt-6 pb-4.5'
+      whileHover={{ scale: 1.01 }}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
       {/* 프로젝트 이름 / 포지션 */}
       <span className='text-lg leading-[21.78px] font-semibold text-[#4C4C4C]'>
         {project?.project}
@@ -26,14 +33,17 @@ function ResumeProjectItem(props: ResumeProjectItemProps) {
 
       {/* 프로젝트 기술 스택 */}
       <div className='mt-3.75 flex items-center gap-2'>
-        {project?.skills.split(', ').map((skill) => (
-          <div
-            key={skill}
-            className='flex h-5 items-center justify-center rounded-[10px] bg-[#DBE9FE] px-2.5 text-xs leading-[16.34px] font-semibold text-[#1D40AF]'
-          >
-            {skill}
-          </div>
-        ))}
+        {project?.skills
+          .split(', ')
+          .slice(0, 5)
+          .map((skill) => (
+            <div
+              key={skill}
+              className='flex h-5 items-center justify-center rounded-[10px] bg-[#DBE9FE] px-2.5 text-xs leading-[16.34px] font-semibold text-[#1D40AF]'
+            >
+              {skill}
+            </div>
+          ))}
       </div>
 
       {/* 프로젝트 상세 설명 */}
@@ -42,7 +52,7 @@ function ResumeProjectItem(props: ResumeProjectItemProps) {
           <p className='leading-6'>{description}</p>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 }
 

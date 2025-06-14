@@ -4,7 +4,8 @@ import MainNavItem from '../../shared/components/MainNavItem';
 import SearchBar from '../../shared/components/SearchBar';
 import { fetchRecruitmentList } from '../../api/recruitment';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import banner from '/images/png/banner/banner.png';
+import { motion } from 'framer-motion';
 
 // COLORS 정의
 const COLORS = {
@@ -57,10 +58,21 @@ function Main() {
   };
 
   return (
-    <div className='flex w-full flex-col items-center overflow-hidden'>
+    <motion.div
+      className='flex w-full flex-col items-center overflow-hidden'
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 20 }}
+      transition={{ duration: 0.5 }}
+    >
       {/* 배너 */}
-      <div className='flex h-100.25 w-full items-center justify-center bg-black font-bold text-white'>
-        배너
+      <div className='flex w-full items-center justify-center bg-black font-bold text-white'>
+        <img
+          src={banner}
+          alt='Banner'
+          className='h-full w-full object-cover'
+          draggable={false}
+        />
       </div>
 
       {/* 메인 컨텐츠 */}
@@ -69,7 +81,14 @@ function Main() {
           {/* 메뉴 */}
           <div className='flex h-27.5 gap-10'>
             {MAIN_NAV_ITEMS.map((item, idx) => (
-              <MainNavItem key={`${item.title}-${idx}`} {...item} />
+              <motion.div
+                key={`${item.title}-${idx}`}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 * idx, duration: 0.3 }}
+              >
+                <MainNavItem {...item} />
+              </motion.div>
             ))}
           </div>
 
@@ -85,21 +104,31 @@ function Main() {
           {/* 기업 공고 그리드 */}
           <div className='mt-9.75 flex flex-col items-center gap-9.75'>
             <div className='grid w-250 grid-cols-2 grid-rows-3'>
-              {recruitmentList?.content.map((recruitment) => (
-                <JobPost
+              {recruitmentList?.content.map((recruitment, idx) => (
+                <motion.div
                   key={recruitment.id}
-                  recruitment={recruitment}
-                  onClick={() => handleRecruitmentItemClick(recruitment.id)}
-                />
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 * idx, duration: 0.3 }}
+                >
+                  <JobPost
+                    recruitment={recruitment}
+                    onClick={() => handleRecruitmentItemClick(recruitment.id)}
+                  />
+                </motion.div>
               ))}
             </div>
-            <button className='font-scd text-main-blue border-main-blue h-9.25 w-35.5 cursor-pointer rounded-[18px] border-2 border-solid text-sm font-medium'>
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.97 }}
+              className='font-scd text-main-blue border-main-blue hover:bg-main-blue h-9.25 w-35.5 cursor-pointer rounded-[18px] border-2 border-solid text-sm font-medium transition-all duration-300 hover:text-white'
+            >
               더 많은 기업 보기
-            </button>
+            </motion.button>
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

@@ -23,7 +23,7 @@ function ExperienceInputItem(props: ExperienceInputItemProps) {
     <div className='flex w-full flex-col gap-1.25'>
       <span className='text-sm leading-4 font-medium'>{label}</span>
       <div
-        className={`flex ${name === 'content' ? 'h-28' : 'h-10'} w-full rounded-[5px]`}
+        className={`flex ${name === 'content' ? 'h-28' : 'h-10'} w-full rounded-[5px] transition-all duration-300 ease-in-out focus-within:ring-1 focus-within:ring-[#2563EB]`}
         style={{ border: '1px solid #898989B2' }}
       >
         {isDate ? (

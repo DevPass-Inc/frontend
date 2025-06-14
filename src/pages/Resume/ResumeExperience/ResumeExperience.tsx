@@ -4,6 +4,7 @@ import Stepper from '../../../shared/components/Stepper';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { fetchDevExperiences } from '../../../api/dev-experience';
+import { motion } from 'framer-motion';
 
 // Step
 const STEP = [
@@ -55,7 +56,13 @@ function ResumeExperience() {
   }, [isDevExperiencesError]);
 
   return (
-    <div className='w-main overflow-hidden'>
+    <motion.div
+      className='w-main overflow-hidden'
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 10 }}
+      transition={{ duration: 0.4 }}
+    >
       <div className='mt-8.75 mb-12'>
         <div className='flex flex-col items-center'>
           {/* Step Progress Bar */}
@@ -70,21 +77,27 @@ function ResumeExperience() {
 
             {/* 경험 리스트 */}
             <div className='mt-11 flex w-full flex-col gap-7'>
-              {devExperiences.map((exp) => (
-                <ResumeExperiencePreviewItem
+              {devExperiences.map((exp, idx) => (
+                <motion.div
                   key={exp.id}
-                  id={exp.id}
-                  selectedExp={selectedExpId}
-                  handleSelectExpId={() => handleSelectExpId(exp.id)}
-                  devExperience={exp}
-                />
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 * idx, duration: 0.3 }}
+                >
+                  <ResumeExperiencePreviewItem
+                    id={exp.id}
+                    selectedExp={selectedExpId}
+                    handleSelectExpId={() => handleSelectExpId(exp.id)}
+                    devExperience={exp}
+                  />
+                </motion.div>
               ))}
             </div>
 
             {/* 다음 단계로 버튼 */}
             <button
               type='button'
-              className='bg-main-blue mt-11.75 flex h-15.75 w-full cursor-pointer items-center justify-center rounded-[10px] text-xl font-semibold text-white transition-all duration-200 disabled:cursor-not-allowed disabled:bg-[#87A1E7]'
+              className='bg-main-blue mt-11.75 flex h-15.75 w-full cursor-pointer items-center justify-center rounded-[10px] text-xl font-semibold text-white transition-all duration-300 ease-in-out hover:brightness-90 active:scale-[0.97] disabled:cursor-not-allowed disabled:bg-[#87A1E7]'
               disabled={selectedExpId === null}
               onClick={handleNextStepButtonClick}
             >
@@ -93,7 +106,7 @@ function ResumeExperience() {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

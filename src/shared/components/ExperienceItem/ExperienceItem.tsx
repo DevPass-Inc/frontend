@@ -12,7 +12,11 @@ function ExperienceItem(props: ExperienceItemProps) {
   return (
     <button
       type='button'
-      className={`${isSelected ? 'bg-main-blue text-white' : 'bg-white text-[#1E1E1E] hover:bg-gray-100'} flex h-18 w-full cursor-pointer flex-col items-start justify-center gap-1.25 rounded-[5px] px-5 transition-all duration-200`}
+      className={`${
+        isSelected
+          ? 'bg-main-blue text-white'
+          : 'bg-white text-[#1E1E1E] hover:bg-gray-100'
+      } flex h-18 w-full cursor-pointer flex-col items-start justify-center gap-1.25 rounded-[5px] px-5 transition-all duration-300 ease-in-out`}
       style={{
         boxShadow: '0px 2px 8px 0px #00000026',
       }}

@@ -10,7 +10,7 @@ function ExperiencePreviewItem(props: ExperiencePreviewItemProps) {
   return (
     <div
       style={{ boxShadow: '0px 2px 8px 0px rgba(0, 0, 0, 0.15)' }}
-      className='flex h-18 w-full cursor-pointer flex-col gap-1.25 rounded-[5px] bg-white px-5 py-3 text-[#1E1E1E] transition-all duration-200 hover:bg-gray-50'
+      className='flex h-18 w-full cursor-pointer flex-col gap-1.25 rounded-[5px] bg-white px-5 py-3 text-[#1E1E1E] transition-all duration-300 ease-in-out hover:bg-[#f8f9fa] hover:shadow-md'
       onClick={onClick}
     >
       <span className='text-xl leading-6 font-semibold'>{title}</span>
