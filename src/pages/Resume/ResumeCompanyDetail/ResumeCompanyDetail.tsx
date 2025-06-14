@@ -1,6 +1,18 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Recruitment } from '../../../api/recruitment';
 import { GithubInfo } from '../../../api/github';
+import { motion } from 'framer-motion';
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 10 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.1, duration: 0.3 },
+  }),
+};
+
+const buttonTap = { scale: 0.97 };
 
 function ResumeCompanyDetail() {
   const navigate = useNavigate();
@@ -24,11 +36,22 @@ function ResumeCompanyDetail() {
   };
 
   return (
-    <div className='w-main overflow-hidden'>
+    <motion.div
+      className='w-main overflow-hidden'
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 10 }}
+      transition={{ duration: 0.4 }}
+    >
       <div className='mt-8.75 mb-12'>
         <div className='flex w-full items-start justify-center gap-5'>
           {/* 채용공고 상세 */}
-          <div className='w-201.75 rounded-lg border border-[#dfdfdf] bg-white shadow-sm'>
+          <motion.div
+            className='w-201.75 rounded-lg border border-[#dfdfdf] bg-white shadow-sm'
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.4 }}
+          >
             {/* 헤더 */}
             <div className='p-6'>
               <div className='flex items-start gap-4'>
@@ -84,15 +107,33 @@ function ResumeCompanyDetail() {
             <div className='p-6'>
               <h2 className='mb-4 text-lg font-bold'>업무 소개</h2>
 
-              <p className='mb-4 text-sm'>{recruitments.mainTask}</p>
-              <p className='mb-4 text-sm'>{recruitments.qualification}</p>
-              <p className='mb-4 text-sm'>{recruitments.preferred}</p>
-              <p className='mb-4 text-sm'>{recruitments.benefit}</p>
+              {[
+                recruitments.mainTask,
+                recruitments.qualification,
+                recruitments.preferred,
+                recruitments.benefit,
+              ].map((text, i) => (
+                <motion.p
+                  key={i}
+                  className='mb-4 text-sm'
+                  variants={fadeInUp}
+                  initial='hidden'
+                  animate='visible'
+                  custom={i}
+                >
+                  {text}
+                </motion.p>
+              ))}
             </div>
-          </div>
+          </motion.div>
 
           {/* 채용공고 선택하기 */}
-          <div className='flex-1 rounded-lg border border-[#dfdfdf] bg-white shadow-sm'>
+          <motion.div
+            className='flex-1 rounded-lg border border-[#dfdfdf] bg-white shadow-sm'
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.4 }}
+          >
             <div className='p-8'>
               {/* 기업 이미지 */}
               <div className='flex h-12 w-12 flex-shrink-0 items-center justify-center overflow-hidden rounded bg-[#3d4c62]'>
@@ -117,17 +158,19 @@ function ResumeCompanyDetail() {
               </div>
 
               {/* 이 기업 선택하기 버튼 */}
-              <button
-                className='bg-main-blue mt-4 w-full cursor-pointer rounded-sm py-2 text-white'
+              <motion.button
+                whileTap={buttonTap}
+                whileHover={{ scale: 1.01 }}
+                className='bg-main-blue mt-4 w-full cursor-pointer rounded-sm py-2 text-white transition-all duration-200 hover:brightness-95 active:scale-[0.97]'
                 onClick={handleSelectCompanyButtonClick}
               >
                 이 기업 선택하기
-              </button>
+              </motion.button>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

@@ -15,7 +15,7 @@ function JobPost(props: JobPostProps) {
     <div className='h-full w-full p-2.5'>
       {/* 기업 공고 */}
       <div
-        className='flex h-full w-full cursor-pointer items-start gap-5 rounded-[5px] border border-solid border-[#DAD9D9] bg-white p-3.75'
+        className='flex h-full w-full cursor-pointer items-start gap-5 rounded-[5px] border border-solid border-[#DAD9D9] bg-white p-3.75 transition-all duration-300 hover:-translate-y-[1px] hover:shadow-sm'
         onClick={onClick}
       >
         {/* 로고 */}

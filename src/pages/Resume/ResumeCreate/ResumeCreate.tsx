@@ -1,6 +1,5 @@
 import Stepper from '../../../shared/components/Stepper';
 import saveIcon from '/images/svg/icons/save.svg';
-import sampleCompanyLogoIcon from '/images/sample/sample_company_logo.png';
 import devPassLogoIcon from '/images/svg/logo/devpass_logo.svg';
 import ResumeProjectItem from '../../../components/ResumeProjectItem';
 import { Fragment, useEffect } from 'react';
@@ -9,6 +8,7 @@ import { GithubInfo } from '../../../api/github';
 import { useQuery } from '@tanstack/react-query';
 import { generateResumeByDevExpIdAndRecrId } from '../../../api/resume';
 import { ClipLoader } from 'react-spinners';
+import { motion } from 'framer-motion';
 
 // Step
 const STEP = [
@@ -18,6 +18,17 @@ const STEP = [
   'AI 이력서 생성',
   'Success',
 ];
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 10 },
+  visible: (i = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.1, duration: 0.3 },
+  }),
+};
+
+const buttonTap = { scale: 0.97 };
 
 function ResumeCreate() {
   const { selectedExpId, githubInfo, recruitmentId } = useLocation().state as {
@@ -58,7 +69,13 @@ function ResumeCreate() {
   }
 
   return (
-    <div className='w-main overflow-hidden'>
+    <motion.div
+      className='w-main overflow-hidden'
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 10 }}
+      transition={{ duration: 0.4 }}
+    >
       <div className='mt-8.75 mb-12.75'>
         <div className='flex flex-col items-center'>
           {/* Step Progress Bar */}
@@ -83,15 +100,17 @@ function ResumeCreate() {
                       placeholder='이력서 제목'
                     />
                   </div>
-                  <button
+                  <motion.button
                     type='button'
-                    className='flex h-10.5 w-32.75 cursor-pointer items-center justify-center gap-2 rounded bg-[#0043CE]'
+                    whileTap={buttonTap}
+                    whileHover={{ scale: 1.02 }}
+                    className='flex h-10.5 w-32.75 cursor-pointer items-center justify-center gap-2 rounded bg-[#0043CE] transition-all duration-200 hover:brightness-95'
                   >
                     <img src={saveIcon} alt='Save' className='h-6.5 w-6.5' />
                     <span className='leading-[19.36px] font-medium text-white'>
                       저장하기
                     </span>
-                  </button>
+                  </motion.button>
                 </div>
               </div>
 
@@ -118,16 +137,19 @@ function ResumeCreate() {
                     </span>
                     <div className='mt-3.25 flex flex-col font-medium text-[#4B5563]'>
                       <span className='leading-6.5'>
-                        이메일: {resume.resume.email}
+                        이메일:{' '}
+                        {resume.resume.email || 'qkrwlsn102109@tukorea.ac.kr'}
                       </span>
                       <span className='leading-6.5'>
-                        연락처: {resume.resume.phone}
+                        연락처: {resume.resume.phone || '010-4655-4191'}
                       </span>
                       <span className='leading-6.5'>
-                        깃허브: {resume.resume.github}
+                        깃허브:{' '}
+                        {resume.resume.github || 'https://github.com/nagosu'}
                       </span>
                       <span className='leading-6.5'>
-                        블로그: {resume.resume.blog}
+                        블로그:{' '}
+                        {resume.resume.blog || 'https://blog.nagosu.dev'}
                       </span>
                     </div>
                   </div>
@@ -137,22 +159,23 @@ function ResumeCreate() {
                 <hr className='mt-9.25 w-full text-[#CFCFCF]' />
 
                 {/* 요약 */}
-                <div className='mt-8.5 flex flex-col items-start gap-3.25'>
-                  {/* 타이틀 */}
-                  <h2 className='text-xl leading-[24.02px] font-bold text-[#111827]'>
-                    요약
-                  </h2>
-
-                  {/* 요약 내용 */}
-                  <p className='leading-6.5 font-medium break-all text-[#4B5563]'>
-                    {resume.resume.summary.map((summary, index) => (
-                      <Fragment key={index}>
-                        {summary}
-                        {index !== resume.resume.summary.length - 1 && <br />}
+                <motion.div
+                  className='mt-8.5 flex flex-col items-start gap-3.25'
+                  variants={fadeInUp}
+                  initial='hidden'
+                  animate='visible'
+                  custom={0}
+                >
+                  <h2 className='text-xl font-bold'>요약</h2>
+                  <p className='text-[#4B5563]'>
+                    {resume.resume.summary.map((s, i) => (
+                      <Fragment key={i}>
+                        {s}
+                        {i !== resume.resume.summary.length - 1 && <br />}
                       </Fragment>
                     ))}
                   </p>
-                </div>
+                </motion.div>
 
                 {/* 구분선 */}
                 <hr className='mt-8.5 w-full text-[#CFCFCF]' />
@@ -293,7 +316,7 @@ function ResumeCreate() {
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

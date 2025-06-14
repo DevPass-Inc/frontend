@@ -40,7 +40,9 @@ function ResumePreviewItem(props: ResumePreviewItemProps) {
           프로젝트
         </h4>
         <p className='text-xs leading-6.5 font-medium text-[#4C4C4C]'>
-          {resume.resume.experience[0].project}
+          {resume.resume.experience
+            .map((experience) => experience.project)
+            .join(', ')}
         </p>
       </div>
 

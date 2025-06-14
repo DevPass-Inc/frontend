@@ -73,7 +73,7 @@ function CompanyMatchingResultPreviewItem(
 
         {/* 기술 리스트 */}
         <div className='flex items-center gap-1.75'>
-          {result.stacks.map((stack, idx) => (
+          {result.stacks.slice(0, 3).map((stack, idx) => (
             <div
               key={`company-matching-result-preview-item-stack-${idx}`}
               className='flex h-5 items-center justify-center gap-1.25 rounded-[10px] bg-[#D1FAE5] px-3'
@@ -82,12 +82,19 @@ function CompanyMatchingResultPreviewItem(
                 {stack.stack}
               </span>
               <img
-                src={stack.required ? neededIcon : notNeededIcon}
+                src={stack.required ? notNeededIcon : neededIcon} // TODO: 다시 바꿔야함
                 alt={stack.required ? 'Needed' : 'Not Needed'}
                 className='h-3 w-3'
               />
             </div>
           ))}
+          {result.stacks.length > 3 && (
+            <div className='flex items-center gap-1.25 rounded-[10px] bg-[#D1FAE5] px-3'>
+              <span className='font-noto text-xs leading-[16.34px] font-semibold text-[#166434]'>
+                외 {result.stacks.length - 3}개
+              </span>
+            </div>
+          )}
         </div>
       </div>
 

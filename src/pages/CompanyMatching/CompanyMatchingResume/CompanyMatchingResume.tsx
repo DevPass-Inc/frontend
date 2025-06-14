@@ -3,6 +3,7 @@ import ResumePreviewItem from '../../../components/ResumePreviewItem';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { fetchResumeList } from '../../../api/resume';
+import { motion } from 'framer-motion';
 
 function CompanyMatchingResume() {
   const navigate = useNavigate();
@@ -38,7 +39,13 @@ function CompanyMatchingResume() {
   }, [resumeList]);
 
   return (
-    <div className='w-main overflow-hidden'>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 20 }}
+      transition={{ duration: 0.5 }}
+      className='w-main overflow-hidden'
+    >
       <div className='mt-12.5 mb-29'>
         <div className='flex flex-col items-center gap-12.5'>
           {/* 타이틀 */}
@@ -52,7 +59,7 @@ function CompanyMatchingResume() {
           </div>
 
           {/* 이력서 리스트 */}
-          <div className='relative max-h-[500px] w-full overflow-y-auto'>
+          <div className='relative max-h-[600px] w-full overflow-y-auto'>
             <div className='flex flex-wrap justify-center gap-5 pr-2'>
               {resumeList.map((resume, index) => (
                 <ResumePreviewItem
@@ -75,7 +82,7 @@ function CompanyMatchingResume() {
           </button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

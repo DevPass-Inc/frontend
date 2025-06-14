@@ -6,6 +6,7 @@ import CompanyMatchingResultPreviewItem from '../../../components/CompanyMatchin
 import { useLocation } from 'react-router-dom';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import { ClipLoader } from 'react-spinners';
 
 function CompanyMatchingResult() {
   const { selectedResume } = useLocation().state; // 선택된 이력서 ID 가져오기
@@ -34,6 +35,19 @@ function CompanyMatchingResult() {
       console.error('기업 매칭 결과 조회 실패');
     }
   }, [isMatchingResultsError]);
+
+  if (isMatchingResultsLoading) {
+    return (
+      <div className='flex h-screen items-center justify-center'>
+        <div className='flex flex-col items-center gap-4'>
+          <ClipLoader size={50} color='#0043CE' />
+          <p className='text-lg font-medium text-[#4B5563]'>
+            기업 매칭 중입니다...
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className='w-main overflow-hidden'>

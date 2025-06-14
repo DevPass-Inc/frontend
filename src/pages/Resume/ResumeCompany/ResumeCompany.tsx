@@ -10,6 +10,7 @@ import {
   fetchRecruitmentList,
 } from '../../../api/recruitment';
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 
 // Step
 const STEP = [
@@ -73,7 +74,13 @@ function ResumeCompany() {
   }, [recruitments]);
 
   return (
-    <div className='w-main overflow-hidden'>
+    <motion.div
+      className='w-main overflow-hidden'
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 10 }}
+      transition={{ duration: 0.4 }}
+    >
       <div className='mt-8.75 mb-12'>
         <div className='flex flex-col items-center'>
           {/* Step Progress Bar */}
@@ -109,12 +116,18 @@ function ResumeCompany() {
           {/* 기업 공고 그리드 */}
           <div className='mt-10.5 flex w-full flex-col items-center'>
             <div className='grid h-139 w-250 grid-cols-2 grid-rows-4'>
-              {recruitmentList?.content.map((recruitment) => (
-                <JobPost
+              {recruitmentList?.content.map((recruitment, idx) => (
+                <motion.div
                   key={recruitment.id}
-                  recruitment={recruitment}
-                  onClick={() => handleRecruitmentItemClick(recruitment.id)}
-                />
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.05, duration: 0.3 }}
+                >
+                  <JobPost
+                    recruitment={recruitment}
+                    onClick={() => handleRecruitmentItemClick(recruitment.id)}
+                  />
+                </motion.div>
               ))}
             </div>
           </div>
@@ -125,7 +138,7 @@ function ResumeCompany() {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

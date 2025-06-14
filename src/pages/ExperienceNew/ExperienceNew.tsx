@@ -9,6 +9,7 @@ import {
 } from '../../api/dev-experience';
 import ExperienceItemNew from '../../shared/components/ExperienceItemNew';
 import { useQuery } from '@tanstack/react-query';
+import { motion } from 'framer-motion';
 
 function ExperienceNew() {
   const [selectedExpId, setSelectedExpId] = useState<number | null>(null); // 선택된 경험
@@ -86,7 +87,13 @@ function ExperienceNew() {
   }, [isDevExperienceDetailError, devExerienceDetailError]);
 
   return (
-    <div className='w-main overflow-hidden'>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 20 }}
+      transition={{ duration: 0.5 }}
+      className='w-main overflow-hidden'
+    >
       <div className='mt-9.5 mb-15.5'>
         <div className='flex w-full flex-col gap-9.25'>
           {/* 타이틀 */}
@@ -196,7 +203,7 @@ function ExperienceNew() {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

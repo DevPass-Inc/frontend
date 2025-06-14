@@ -3,6 +3,7 @@ import Stepper from '../../../shared/components/Stepper';
 import githubLogoLightIcon from '/images/svg/logo/github_logo_light.svg';
 import { fetchGithubInfo, GithubInfo } from '../../../api/github';
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 
 // Step
 const STEP = [
@@ -12,6 +13,18 @@ const STEP = [
   'AI 이력서 생성',
   'Success',
 ];
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 10 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+};
+
+const buttonTap = { scale: 0.97 };
+
+const containerVariant = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { delay: 0.1, duration: 0.5 } },
+};
 
 function ResumeGithub() {
   const navigate = useNavigate();
@@ -46,7 +59,13 @@ function ResumeGithub() {
   };
 
   return (
-    <div className='w-main overflow-hidden'>
+    <motion.div
+      className='w-main overflow-hidden'
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 10 }}
+      transition={{ duration: 0.4 }}
+    >
       <div className='mt-8.75 mb-12'>
         <div className='flex flex-col items-center'>
           {/* Step Progress Bar */}
@@ -57,17 +76,20 @@ function ResumeGithub() {
             {isConnecting ? (
               <>
                 {/* 깃허브 연동 중 (로딩스피너) */}
-                <div className='flex h-full w-full flex-col items-center justify-center'>
-                  <div className='flex items-center justify-center'>
-                    <div className='h-10 w-10 animate-spin rounded-full border-b-4 border-gray-900'></div>
-                  </div>
-                  <p className='mt-10 text-2xl leading-[29px] font-bold text-[#111827]'>
+                <motion.div
+                  className='flex h-full w-full flex-col items-center justify-center'
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <div className='h-10 w-10 animate-spin rounded-full border-b-4 border-gray-900'></div>
+                  <p className='mt-10 text-2xl font-bold text-[#111827]'>
                     깃허브 데이터를 가져오는 중입니다
                   </p>
-                  <p className='mt-6 text-xl leading-6 font-medium text-[#1E1E1E]'>
+                  <p className='mt-6 text-xl font-medium text-[#1E1E1E]'>
                     레포지토리와 커밋 기록을 분석하고 있습니다...
                   </p>
-                </div>
+                </motion.div>
               </>
             ) : (
               <>
@@ -88,7 +110,12 @@ function ResumeGithub() {
                   </h2>
 
                   {/* 제공 정보 리스트 */}
-                  <div className='ml-2 flex flex-col items-start'>
+                  <motion.div
+                    className='ml-2 flex flex-col items-start'
+                    variants={fadeInUp}
+                    initial='hidden'
+                    animate='visible'
+                  >
                     <div className='flex items-center gap-2'>
                       <div className='h-1 w-1 rounded-full bg-[#4B5563]'></div>
                       <p className='leading-9 text-[#4B5563]'>
@@ -111,16 +138,21 @@ function ResumeGithub() {
                       <div className='h-1 w-1 rounded-full bg-[#4B5563]'></div>
                       <p className='leading-9 text-[#4B5563]'>프로필 정보</p>
                     </div>
-                  </div>
+                  </motion.div>
                 </div>
 
                 {/* 연동 / 다음 버튼 */}
                 <div className='mt-8.75 flex h-15.75 w-full gap-3.5'>
-                  <button
+                  <motion.button
                     type='button'
-                    className={`${isConnected ? 'cursor-not-allowed bg-[#87A1E7]' : 'bg-main-blue cursor-pointer'} flex h-full flex-1 items-center justify-center gap-2 rounded-[10px]`}
+                    whileTap={buttonTap}
+                    className={`${
+                      isConnected
+                        ? 'cursor-not-allowed bg-[#87A1E7]'
+                        : 'bg-main-blue cursor-pointer hover:brightness-95'
+                    } flex h-full flex-1 items-center justify-center gap-2 rounded-[10px] transition-all duration-200`}
                     onClick={handleConnectGithubButtonClick}
-                    disabled={isConnecting || isConnected} // 깃허브 연동 중일 때 버튼 비활성화
+                    disabled={isConnecting || isConnected}
                   >
                     <img
                       src={githubLogoLightIcon}
@@ -130,21 +162,23 @@ function ResumeGithub() {
                     <p className='text-xl font-semibold text-white'>
                       {isConnected ? '연동 완료' : '깃허브 연동하기'}
                     </p>
-                  </button>
-                  <button
+                  </motion.button>
+
+                  <motion.button
                     type='button'
-                    className='flex h-full flex-1 cursor-pointer items-center justify-center gap-2 rounded-[10px] bg-[#F3F4F6] text-xl font-semibold text-[#374151]'
+                    whileTap={buttonTap}
+                    className='flex h-full flex-1 cursor-pointer items-center justify-center gap-2 rounded-[10px] bg-[#F3F4F6] text-xl font-semibold text-[#374151] transition-all duration-200 hover:bg-[#e5e7eb]'
                     onClick={handleNextButtonClick}
                   >
                     {isConnected ? '다음 단계로' : '건너뛰기'} &gt;
-                  </button>
+                  </motion.button>
                 </div>
               </>
             )}
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
