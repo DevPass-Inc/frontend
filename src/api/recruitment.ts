@@ -28,13 +28,27 @@ export interface RecruitmentDetail {
 }
 
 export interface RecruitmentListContent {
-  id: number;
-  imageUrl: string;
+  id: number | string; // 실제로는 string으로 내려옴, number로 저장하면 파싱 필요
+  companyId: number;
   companyName: string;
+  employeeCount: string;
+  newHireAvgSalary: number;
+  positionName: string;
   position: string;
+  location: {
+    region: string;
+    district: string;
+  };
   career: string;
-  location: string;
-  stacks: string[];
+  mainTask: string;
+  qualification: string;
+  preferred: string;
+  benefit: string;
+  deadline: string;
+  imageUrl: string;
+  minCareer: number;
+  maxCareer: number;
+  stacks: number[];
 }
 
 export interface RecruitmentList {
@@ -82,9 +96,9 @@ export const fetchCompanyMatchingResults = async (
 
 // 채용공고 리스트 조회 API
 export const fetchRecruitmentList = async (
-  page: number = 1,
+  page: number = 0,
   size: number = 8,
-  direction: string = 'ASC'
+  sort: string = 'DESC'
 ): Promise<RecruitmentList> => {
   const response = await api.get<ApiResponse<RecruitmentList>>(
     `/recruitments`,
@@ -92,10 +106,12 @@ export const fetchRecruitmentList = async (
       params: {
         page,
         size,
-        direction,
+        sort,
       },
     }
   );
+
+  console.log(response.data.result);
 
   return response.data.result;
 };

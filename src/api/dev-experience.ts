@@ -100,15 +100,22 @@ export const deleteProjectExperienceById = async (
   console.log('프로젝트 경험 삭제 성공', response.data);
 };
 
+// 기술 스택 조회 API
+export const fetchStackList = async (): Promise<Stack[]> => {
+  const response = await api.get<ApiResponse<Stack[]>>('/stacks');
+
+  return response.data.result.stacks;
+};
+
 // 기술스택 등록 API
 export const addStackExperienceById = async (
-  id: number,
-  stacks: string[]
+  experienceId: number,
+  stackIds: number[]
 ): Promise<Stack[]> => {
   const response = await api.post<ApiResponse<Stack[]>>(
-    `/developments/stacks/${id}`,
+    `/developments/stacks/${experienceId}`,
     {
-      stacks: stacks,
+      stackIds,
     }
   );
 
@@ -117,11 +124,11 @@ export const addStackExperienceById = async (
 
 // 기술스택 수정 API
 export const updateStackExperienceById = async (
-  id: number,
-  stacks: string[]
+  experienceId: number,
+  stackIds: number[]
 ): Promise<Stack[]> => {
-  const response = await api.put(`/developments/stacks/${id}`, {
-    stacks,
+  const response = await api.put(`/developments/stacks/${experienceId}`, {
+    stackIds,
   });
 
   return response.data.result.stacks;

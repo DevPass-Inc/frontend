@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import ExperienceInputItem from '../../shared/components/ExperienceInputItem';
 import ExperienceSaveOrAddButton from '../../shared/components/ExperienceSaveOrAddButton';
-import { DevExperienceDetail } from '../../types/dev-experience.types';
+import { DevExperienceDetail, Stack } from '../../types/dev-experience.types';
 import { useEffect, useState } from 'react';
 import {
   addInternshipExperienceById,
@@ -9,6 +9,7 @@ import {
   addStackExperienceById,
   deleteProjectExperienceById,
   fetchProjectExperienceById,
+  fetchStackList,
   updateProjectExperienceById,
   updateStackExperienceById,
 } from '../../api/dev-experience';
@@ -98,6 +99,8 @@ function ExperienceForm(props: ExperienceFormProps) {
   const [isInputMode, setIsInputMode] = useState<boolean>(false); // 입력 모드 여부
   const [isEditMode, setIsEditMode] = useState<boolean>(false); // 수정 모드 여부
   const [isStackModalOpen, setIsStackModalOpen] = useState<boolean>(false); // 스택 모달 여부
+  const [stackOptions, setStackOptions] = useState<Stack[]>([]); // 기술 스택 옵션
+  const [stackInputValue, setStackInputValue] = useState<string>(''); // 기술 스택 입력값
 
   // 프로젝트 등록 데이터 폼
   const [projectForm, setProjectForm] = useState({
@@ -108,7 +111,7 @@ function ExperienceForm(props: ExperienceFormProps) {
     endDate: '',
     content: '',
   });
-  const [stackForm, setStackForm] = useState<string[]>([]); // 스택 등록 데이터 폼
+  const [stackForm, setStackForm] = useState<Stack[]>([]); // 스택 등록 데이터 폼
   const [existingStacks, setExistingStacks] = useState<string[]>([]); // 기존 스택 데이터
   // 인턴 등록 데이터 폼
   const [internshipForm, setInternshipForm] = useState({
@@ -122,6 +125,11 @@ function ExperienceForm(props: ExperienceFormProps) {
   // 선택된 프로젝트 ID
   const [selectedProjectId, setSelectedProjectId] = useState<number | null>(
     null
+  );
+
+  // 기술 스택 필터링
+  const filteredStackOptions = stackOptions.filter((option) =>
+    option.name.toLowerCase().includes(stackInputValue.toLowerCase())
   );
 
   // 프로젝트 등록 API 호출
@@ -196,7 +204,7 @@ function ExperienceForm(props: ExperienceFormProps) {
 
   // 스택 등록 API 호출
   const addStackMutation = useMutation({
-    mutationFn: (data: string[]) => addStackExperienceById(selectedExpId, data),
+    mutationFn: (data: number[]) => addStackExperienceById(selectedExpId, data),
     onSuccess: (data) => {
       console.log('스택 등록 성공', data);
       queryClient.invalidateQueries(); // 캐시 무효화 -> 데이터 갱신
@@ -289,7 +297,7 @@ function ExperienceForm(props: ExperienceFormProps) {
         }
 
         // 스택 경험 등록 API 호출
-        addStackMutation.mutate(stackForm);
+        addStackMutation.mutate(stackForm.map((stack) => stack.id));
       } else if (currentTab === 'intern') {
         if (
           !internshipForm.companyName ||
@@ -314,31 +322,31 @@ function ExperienceForm(props: ExperienceFormProps) {
   };
 
   // 기술 스택 추가 엔터키 핸들러
-  const handleStackInputKeyDown = (
-    e: React.KeyboardEvent<HTMLInputElement>
-  ) => {
-    if (e.key === 'Enter') {
-      const inputValue = (e.target as HTMLInputElement).value; // 입력값 가져오기
+  // const handleStackInputKeyDown = (
+  //   e: React.KeyboardEvent<HTMLInputElement>
+  // ) => {
+  //   if (e.key === 'Enter') {
+  //     const inputValue = (e.target as HTMLInputElement).value; // 입력값 가져오기
 
-      if (inputValue === '') {
-        alert('기술 스택을 입력해주세요.'); // 입력값이 비어있을 경우 알림
-        return;
-      }
+  //     if (inputValue === '') {
+  //       alert('기술 스택을 입력해주세요.'); // 입력값이 비어있을 경우 알림
+  //       return;
+  //     }
 
-      if (
-        inputValue &&
-        !stackForm.includes(inputValue) &&
-        !existingStacks.includes(inputValue)
-      ) {
-        // 입력값이 비어있지 않고, 기존 스택에 없는 경우에만 추가
-        setStackForm((prev) => [...prev, inputValue]); // 기존의 기술 스택에 추가
-        (e.target as HTMLInputElement).value = ''; // 입력 필드 초기화
-      } else {
-        alert('이미 추가된 기술 스택입니다.'); // 중복된 경우 알림
-        (e.target as HTMLInputElement).value = ''; // 입력 필드 초기화
-      }
-    }
-  };
+  //     if (
+  //       inputValue &&
+  //       !stackForm.includes(inputValue) &&
+  //       !existingStacks.includes(inputValue)
+  //     ) {
+  //       // 입력값이 비어있지 않고, 기존 스택에 없는 경우에만 추가
+  //       setStackForm((prev) => [...prev, inputValue]); // 기존의 기술 스택에 추가
+  //       (e.target as HTMLInputElement).value = ''; // 입력 필드 초기화
+  //     } else {
+  //       alert('이미 추가된 기술 스택입니다.'); // 중복된 경우 알림
+  //       (e.target as HTMLInputElement).value = ''; // 입력 필드 초기화
+  //     }
+  //   }
+  // };
 
   // 기술 스택 추가 버튼 클릭 핸들러
   const handleStackAddButtonClick = () => {
@@ -486,7 +494,7 @@ function ExperienceForm(props: ExperienceFormProps) {
   useEffect(() => {
     if (selectedDevExperienceDetail) {
       setExistingStacks(
-        selectedDevExperienceDetail.stacks.map((stack) => stack.stack)
+        selectedDevExperienceDetail.stacks.map((stack) => stack.name)
       );
     }
   }, [selectedDevExperienceDetail]);
@@ -509,6 +517,15 @@ function ExperienceForm(props: ExperienceFormProps) {
       setSelectedProjectId(null);
     }
   }, [isEditMode]);
+
+  useEffect(() => {
+    if (currentTab === 'stack') {
+      fetchStackList().then((res) => {
+        console.log('기술 스택 조회 성공', res);
+        setStackOptions(res);
+      });
+    }
+  }, [currentTab]);
 
   return (
     <>
@@ -575,25 +592,57 @@ function ExperienceForm(props: ExperienceFormProps) {
               <div className='flex h-10 w-full items-center gap-3'>
                 {/* 기술 스택 입력 필드 */}
                 <div
-                  className='flex h-full flex-1 rounded-[5px]'
+                  className='relative flex h-full flex-1 rounded-[5px]'
                   style={{ border: '1px solid #898989B2' }}
                 >
                   <input
                     type='text'
                     className='text-main h-full w-full bg-transparent px-3 text-sm outline-none'
-                    placeholder='추가할 기술 스택을 입력해주세요.'
-                    onKeyDown={handleStackInputKeyDown}
+                    placeholder='기술 스택을 입력해주세요.'
+                    value={stackInputValue}
+                    onChange={(e) => setStackInputValue(e.target.value)}
+                    // onKeyDown={handleStackInputKeyDown}
                   />
+
+                  {/* 기술 스택 드롭다운 (입력값 자동완성) */}
+                  {stackInputValue && filteredStackOptions.length > 0 && (
+                    <div className='absolute top-full left-0 z-10 mt-1 w-full rounded-[5px] bg-white p-2 shadow-lg'>
+                      <ul className='flex h-fit max-h-[250px] flex-col gap-1.5 overflow-y-auto'>
+                        {filteredStackOptions.map((stack) => (
+                          <li
+                            key={stack.id}
+                            className='cursor-pointer px-3 py-1.5 text-sm font-medium hover:bg-[#F5F5F5]'
+                            onClick={() => {
+                              if (
+                                !stackForm.some(
+                                  (item) => item.id === stack.id
+                                ) &&
+                                !existingStacks.includes(stack.name)
+                              ) {
+                                setStackForm((prev) => [...prev, stack]); // Stack 전체 객체로 저장
+                                setStackInputValue('');
+                              } else {
+                                alert('이미 추가된 기술 스택입니다.');
+                                setStackInputValue('');
+                              }
+                            }}
+                          >
+                            {stack.name}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </div>
 
                 {/* 기술 스택 추가 버튼 */}
-                <button
+                {/* <button
                   type='button'
                   className='bg-main-blue flex h-full cursor-pointer items-center justify-center rounded-[5px] px-5 text-sm font-medium text-white transition-all duration-200 hover:bg-[#1D40AF] hover:brightness-95'
                   onClick={handleStackAddButtonClick}
                 >
                   추가
-                </button>
+                </button> */}
               </div>
             </div>
           </div>
@@ -623,13 +672,13 @@ function ExperienceForm(props: ExperienceFormProps) {
                 >
                   {/* 기술 스택명 */}
                   <span className='text-xs font-semibold text-[#1D40AF]'>
-                    {stack}
+                    {stack.name}
                   </span>
 
                   {/* 삭제 버튼 */}
                   <button
                     type='button'
-                    className='absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 cursor-pointer rounded-full p-1.5'
+                    className='absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full p-1.5'
                     onClick={() => handleStackDeleteButtonClick(stack)}
                   >
                     <MdCancel

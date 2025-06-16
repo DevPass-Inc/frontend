@@ -69,7 +69,7 @@ function JobPost(props: JobPostProps) {
                 className='h-4 w-4 object-contain'
               />
               <h3 className='font-noto text-xxxs font-semibold text-[#898989]'>
-                {recruitment?.location}
+                {`${recruitment?.location.region} ${recruitment?.location.district}`}
               </h3>
             </div>
           </div>

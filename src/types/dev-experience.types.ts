@@ -29,9 +29,8 @@ export interface Internship {
 
 // 개발 경험 (기술스택) 타입
 export interface Stack {
-  stack: string;
+  id: number;
   name: string;
-  required: boolean;
 }
 
 // 개발 경험 조회 데이터 타입
