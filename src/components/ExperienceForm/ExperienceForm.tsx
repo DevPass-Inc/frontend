@@ -676,7 +676,7 @@ function ExperienceForm(props: ExperienceFormProps) {
                   </span>
 
                   {/* 삭제 버튼 */}
-                  <button
+                  {/* <button
                     type='button'
                     className='absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full p-1.5'
                     onClick={() => handleStackDeleteButtonClick(stack)}
@@ -685,7 +685,7 @@ function ExperienceForm(props: ExperienceFormProps) {
                       className='text-[#e95656] transition-all duration-200 hover:text-[#FF0000]'
                       size={16}
                     />
-                  </button>
+                  </button> */}
                 </div>
               ))}
             </div>

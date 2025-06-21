@@ -98,7 +98,12 @@ export const fetchCompanyMatchingResults = async (
 export const fetchRecruitmentList = async (
   page: number = 0,
   size: number = 8,
-  sort: string = 'DESC'
+  sort: string = 'DESC',
+  keyword?: string,
+  position?: string,
+  minCareer?: string,
+  stackId?: number,
+  region?: string
 ): Promise<RecruitmentList> => {
   const response = await api.get<ApiResponse<RecruitmentList>>(
     `/recruitments`,
@@ -107,6 +112,11 @@ export const fetchRecruitmentList = async (
         page,
         size,
         sort,
+        keyword,
+        position,
+        minCareer,
+        stackIds: stackId,
+        region,
       },
     }
   );

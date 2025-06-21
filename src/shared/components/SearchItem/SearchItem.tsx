@@ -3,13 +3,18 @@ import companyIcon from '/images/svg/icons/company.svg';
 import { useEffect, useState } from 'react';
 
 interface SearchItemProps {
-  type: 'stack' | 'company';
+  type: 'stack' | 'company' | 'position';
   width: number | string;
   height: number | string;
+  setKeyword?: (keyword: string) => void;
+  setPosition?: (position: string) => void;
+  setStack?: (stack: string) => void;
+  value?: string;
 }
 
 function SearchItem(props: SearchItemProps) {
-  const { type, width, height } = props;
+  const { type, width, height, setKeyword, setPosition, setStack, value } =
+    props;
 
   const [searchIcon, setSearchIcon] = useState<string>(''); // 검색 아이콘
   const [searchWidth, setSearchWidth] = useState<string>(''); // 실제 width 값
@@ -24,6 +29,9 @@ function SearchItem(props: SearchItemProps) {
     } else if (type === 'company') {
       setSearchIcon(companyIcon);
       setSearchPlaceholder('회사 이름 검색');
+    } else if (type === 'position') {
+      setSearchIcon(companyIcon);
+      setSearchPlaceholder('포지션 검색');
     }
   }, [type]);
 
@@ -64,7 +72,17 @@ function SearchItem(props: SearchItemProps) {
       <input
         type='text'
         placeholder={searchPlaceholder}
-        className='font-scd h-full w-full bg-transparent leading-[19.1px] font-medium placeholder:text-black focus:outline-none'
+        className='font-scd placeholder:text-main-placeholder h-full w-full bg-transparent leading-[19.1px] font-medium focus:outline-none'
+        value={value}
+        onChange={(e) => {
+          if (type === 'company') {
+            setKeyword?.(e.target.value);
+          } else if (type === 'position') {
+            setPosition?.(e.target.value);
+          } else if (type === 'stack') {
+            setStack?.(e.target.value);
+          }
+        }}
       />
     </div>
   );
