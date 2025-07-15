@@ -2,8 +2,19 @@ import sampleCompanyLogo from '/images/sample/sample_company_logo.png';
 import locationIcon from '/images/svg/icons/location.svg';
 import neededStacksIcon from '/images/svg/icons/needed_stacks.svg';
 import farewellIcon from '/images/svg/icons/farewell.svg';
+import {
+  CompanyMatchingResultItem,
+  RecruitmentDetail,
+} from '../../api/recruitment';
 
-function CompanyMatchingDetailInfo() {
+interface CompanyMatchingDetailInfoProps {
+  result: CompanyMatchingResultItem;
+  recruitmentDetail: RecruitmentDetail;
+}
+
+function CompanyMatchingDetailInfo(props: CompanyMatchingDetailInfoProps) {
+  const { result, recruitmentDetail } = props;
+
   return (
     <div className='w-200 rounded-[10px] border border-solid border-[#DFDFDF] bg-white px-8.5 py-5'>
       {/* 기업 로고 & 기업명 & 직무 */}
@@ -11,7 +22,7 @@ function CompanyMatchingDetailInfo() {
         {/* 기업 로고 */}
         <div className='h-25 w-25'>
           <img
-            src={sampleCompanyLogo}
+            src={recruitmentDetail?.imageUrl}
             alt='Company Logo'
             className='h-full w-full object-cover'
           />
@@ -20,10 +31,10 @@ function CompanyMatchingDetailInfo() {
         {/* 기업명 & 직무 */}
         <div className='flex flex-col gap-2.25'>
           <h1 className='text-[28px] leading-[33.89px] font-bold text-[#111827]'>
-            테크스타트
+            {recruitmentDetail?.companyName}
           </h1>
           <h2 className='text-lg leading-6.5 font-medium text-[#4C4C4C]'>
-            시니어 프론트엔드 개발자
+            {recruitmentDetail?.position}
           </h2>
         </div>
       </div>
@@ -48,7 +59,7 @@ function CompanyMatchingDetailInfo() {
               위치
             </h3>
             <p className='text-sm leading-6.5 font-medium text-[#4C4C4C]'>
-              서울 중구
+              {recruitmentDetail?.location}
             </p>
           </div>
         </div>
@@ -69,18 +80,14 @@ function CompanyMatchingDetailInfo() {
 
           {/* 기술 리스트 */}
           <div className='flex items-center gap-3'>
-            <div className='flex h-5 items-center justify-center rounded-[10px] bg-[#DBE9FE] px-2.5 text-xs leading-[16.34px] font-semibold text-[#1D40AF]'>
-              React
-            </div>
-            <div className='flex h-5 items-center justify-center rounded-[10px] bg-[#DBE9FE] px-2.5 text-xs leading-[16.34px] font-semibold text-[#1D40AF]'>
-              Typescript
-            </div>
-            <div className='flex h-5 items-center justify-center rounded-[10px] bg-[#DBE9FE] px-2.5 text-xs leading-[16.34px] font-semibold text-[#1D40AF]'>
-              Next.js
-            </div>
-            <div className='flex h-5 items-center justify-center rounded-[10px] bg-[#DBE9FE] px-2.5 text-xs leading-[16.34px] font-semibold text-[#1D40AF]'>
-              Javascript
-            </div>
+            {result?.stacks.map((stack) => (
+              <div
+                key={stack.id}
+                className='flex h-5 items-center justify-center rounded-[10px] bg-[#DBE9FE] px-2.5 text-xs leading-[16.34px] font-semibold text-[#1D40AF]'
+              >
+                {stack.name}
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -134,7 +141,7 @@ function CompanyMatchingDetailInfo() {
               매칭점수 :
             </span>
             <span className='text-lg leading-6.5 font-bold text-[#2463EB]'>
-              85%
+              {result?.finalScore}
             </span>
           </div>
 
@@ -147,7 +154,7 @@ function CompanyMatchingDetailInfo() {
               <div className='flex items-center gap-2'>
                 <div className='h-0.75 w-0.75 rounded-full bg-[#161D2C]'></div>
                 <p className='text-xs leading-6.5 font-medium text-[#161D2C]'>
-                  JavaScript 기술에 대한 학습이 필요합니다.
+                  JavaScript 기술에 대한 학습이 필요합니다.
                 </p>
               </div>
             </div>

@@ -51,11 +51,12 @@ export const addProjectExperienceById = async (
     startDate: string;
     endDate: string;
     content: string;
+    stackIds: number[];
   }
 ): Promise<Project> => {
   const response = await api.post<ApiResponse<Project>>(
     `/developments/projects/${id}`,
-    newProject
+    { ...newProject, stackIds: newProject.stackIds }
   );
 
   return response.data.result;
@@ -96,19 +97,26 @@ export const updateProjectExperienceById = async (
 export const deleteProjectExperienceById = async (
   id: number
 ): Promise<void> => {
-  const response = await api.delete(`/developments/projects/dev/${id}`);
+  const response = await api.delete(`/developments/projects/${id}`);
   console.log('프로젝트 경험 삭제 성공', response.data);
+};
+
+// 기술 스택 조회 API
+export const fetchStackList = async (): Promise<Stack[]> => {
+  const response = await api.get('/stacks');
+
+  return response.data.result.stacks;
 };
 
 // 기술스택 등록 API
 export const addStackExperienceById = async (
-  id: number,
-  stacks: string[]
+  experienceId: number,
+  stackIds: number[]
 ): Promise<Stack[]> => {
   const response = await api.post<ApiResponse<Stack[]>>(
-    `/developments/stacks/${id}`,
+    `/developments/stacks/${experienceId}`,
     {
-      stacks: stacks,
+      stackIds,
     }
   );
 
@@ -117,11 +125,11 @@ export const addStackExperienceById = async (
 
 // 기술스택 수정 API
 export const updateStackExperienceById = async (
-  id: number,
-  stacks: string[]
+  experienceId: number,
+  stackIds: number[]
 ): Promise<Stack[]> => {
-  const response = await api.put(`/developments/stacks/${id}`, {
-    stacks,
+  const response = await api.put(`/developments/stacks/${experienceId}`, {
+    stackIds,
   });
 
   return response.data.result.stacks;

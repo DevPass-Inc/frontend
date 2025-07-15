@@ -17,9 +17,9 @@ export interface GithubInfo {
 export const fetchGithubInfo = async (
   maxPinned: number = 6
 ): Promise<GithubInfo> => {
-  const response = await api.get<ApiResponse<GithubInfo>>(
-    `/github/details?maxPinned=${maxPinned}`
-  );
+  const response = await api.post<ApiResponse<GithubInfo>>(`/github/details`, {
+    maxPinned,
+  });
 
   return response.data.result;
 };

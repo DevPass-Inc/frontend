@@ -30,8 +30,8 @@ function JobPost(props: JobPostProps) {
         {/* 정보 */}
         <div className='flex flex-col items-start gap-2'>
           {/* 직무 */}
-          <h1 className='font-noto text-sm leading-[19.07px] font-semibold'>
-            {recruitment?.position}
+          <h1 className='font-noto line-clamp-1 text-sm leading-[19.07px] font-semibold'>
+            {recruitment?.positionName}
           </h1>
 
           {/* 회사명 & 응답 속도 */}
@@ -42,9 +42,9 @@ function JobPost(props: JobPostProps) {
             </h2>
 
             {/* 응답 속도 */}
-            <div className='text-main-blue text-xxxs flex h-4 items-center justify-center rounded-[3px] bg-[#E2E2E2] px-2.25 font-semibold whitespace-nowrap'>
+            {/* <div className='text-main-blue text-xxxs flex h-4 items-center justify-center rounded-[3px] bg-[#E2E2E2] px-2.25 font-semibold whitespace-nowrap'>
               평균 1일 이내 응답
-            </div>
+            </div> */}
           </div>
 
           {/* 경력 & 위치 */}
@@ -69,7 +69,7 @@ function JobPost(props: JobPostProps) {
                 className='h-4 w-4 object-contain'
               />
               <h3 className='font-noto text-xxxs font-semibold text-[#898989]'>
-                {recruitment?.location}
+                {`${recruitment?.location.region} ${recruitment?.location.district}`}
               </h3>
             </div>
           </div>
@@ -81,7 +81,7 @@ function JobPost(props: JobPostProps) {
                 key={idx}
                 className='text-xxxs flex h-full items-center justify-center rounded-[3px] bg-[#E2E2E2] px-1.25 font-semibold text-[#333D4B]'
               >
-                {stack}
+                {stack.name}
               </div>
             ))}
             {recruitment?.stacks.length > 3 && (

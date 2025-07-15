@@ -4,6 +4,7 @@ import notNeededIcon from '/images/svg/icons/not_needed.svg';
 import enterIcon from '/images/svg/icons/enter.svg';
 import { useNavigate } from 'react-router-dom';
 import { CompanyMatchingResultItem } from '../../api/recruitment';
+import devPassLogo from '/images/svg/logo/devpass_logo.svg';
 
 interface CompanyMatchingResultPreviewItemProps {
   result: CompanyMatchingResultItem;
@@ -18,7 +19,9 @@ function CompanyMatchingResultPreviewItem(
 
   // 상세 정보 보기 버튼 클릭 시 상세 정보 페이지로 이동
   const handleGoToDetail = () => {
-    navigate('/company/matching/result/1');
+    navigate(`/company/matching/result/${result.recruitmentId}`, {
+      state: { result },
+    });
   };
 
   return (
@@ -27,7 +30,7 @@ function CompanyMatchingResultPreviewItem(
       <div className='flex items-end gap-3.25'>
         {/* 기업 로고 */}
         <img
-          src={sampleCompanyLogo}
+          src={devPassLogo}
           alt='Company Logo'
           className='h-12.5 w-12.5 object-cover'
         />
@@ -79,11 +82,11 @@ function CompanyMatchingResultPreviewItem(
               className='flex h-5 items-center justify-center gap-1.25 rounded-[10px] bg-[#D1FAE5] px-3'
             >
               <span className='font-noto text-xs leading-[16.34px] font-semibold text-[#166434]'>
-                {stack.stack}
+                {stack.name}
               </span>
               <img
-                src={stack.required ? notNeededIcon : neededIcon} // TODO: 다시 바꿔야함
-                alt={stack.required ? 'Needed' : 'Not Needed'}
+                src={stack.isRequired ? neededIcon : notNeededIcon}
+                alt={stack.isRequired ? 'Needed' : 'Not Needed'}
                 className='h-3 w-3'
               />
             </div>
