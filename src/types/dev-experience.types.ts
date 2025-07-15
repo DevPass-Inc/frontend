@@ -31,6 +31,7 @@ export interface Internship {
 export interface Stack {
   id: number;
   name: string;
+  isRequired?: boolean;
 }
 
 // 개발 경험 조회 데이터 타입

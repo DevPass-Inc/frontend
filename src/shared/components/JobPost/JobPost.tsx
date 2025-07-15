@@ -81,7 +81,7 @@ function JobPost(props: JobPostProps) {
                 key={idx}
                 className='text-xxxs flex h-full items-center justify-center rounded-[3px] bg-[#E2E2E2] px-1.25 font-semibold text-[#333D4B]'
               >
-                {stack}
+                {stack.name}
               </div>
             ))}
             {recruitment?.stacks.length > 3 && (

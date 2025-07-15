@@ -54,7 +54,7 @@ export const generateResumeByDevExpIdAndRecrId = async (
   includeGithub: boolean = true
 ): Promise<Resume> => {
   const response = await api.get<ApiResponse<Resume>>(
-    `/resume/generate/${devExperienceId}/${recruitmentId}?includeGithub=${includeGithub}`
+    `/resumes/generate/${devExperienceId}/${recruitmentId}?includeGithub=${includeGithub}`
   );
 
   return response.data.result;
@@ -62,7 +62,7 @@ export const generateResumeByDevExpIdAndRecrId = async (
 
 // 사용자의 이력서 리스트 조회 API
 export const fetchResumeList = async (): Promise<Resume[]> => {
-  const response = await api.get<ApiResponse<Resume[]>>('/resume');
+  const response = await api.get<ApiResponse<Resume[]>>('/resumes');
 
   return response.data.result;
 };

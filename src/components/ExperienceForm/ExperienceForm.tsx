@@ -41,6 +41,12 @@ const PROJECT_FIELDS = [
       '주요 기능, 사용 기술, 문제 해결 경험 등을 상세히 작성해주세요',
   },
   {
+    name: 'stackIds',
+    label: '사용한 기술 스택',
+    placeholder: '사용한 기술 스택을 선택해주세요',
+    isStack: true,
+  },
+  {
     name: 'startDate',
     label: '기간 시작일',
     placeholder: '프로젝트 시작일을 선택해주세요',
@@ -101,6 +107,12 @@ function ExperienceForm(props: ExperienceFormProps) {
   const [isStackModalOpen, setIsStackModalOpen] = useState<boolean>(false); // 스택 모달 여부
   const [stackOptions, setStackOptions] = useState<Stack[]>([]); // 기술 스택 옵션
   const [stackInputValue, setStackInputValue] = useState<string>(''); // 기술 스택 입력값
+  const [selectedProjectStackIds, setSelectedProjectStackIds] = useState<
+    number[]
+  >([]); // 프로젝트 기술 스택 ID 배열
+  const [selectedStackNames, setSelectedStackNames] = useState<string[]>([]); // 프로젝트 기술 스택 이름 배열
+  const [isProjectStackDropdownOpen, setIsProjectStackDropdownOpen] =
+    useState<boolean>(false); // 프로젝트 기술 스택 드롭다운 여부
 
   // 프로젝트 등록 데이터 폼
   const [projectForm, setProjectForm] = useState({
@@ -110,6 +122,7 @@ function ExperienceForm(props: ExperienceFormProps) {
     startDate: '',
     endDate: '',
     content: '',
+    stackIds: [] as number[],
   });
   const [stackForm, setStackForm] = useState<Stack[]>([]); // 스택 등록 데이터 폼
   const [existingStacks, setExistingStacks] = useState<string[]>([]); // 기존 스택 데이터
@@ -424,6 +437,7 @@ function ExperienceForm(props: ExperienceFormProps) {
       startDate: '',
       endDate: '',
       content: '',
+      stackIds: [] as number[],
     });
   };
 
@@ -452,6 +466,7 @@ function ExperienceForm(props: ExperienceFormProps) {
       startDate: '',
       endDate: '',
       content: '',
+      stackIds: [] as number[],
     });
     setInternshipForm({
       companyName: '',
@@ -460,11 +475,14 @@ function ExperienceForm(props: ExperienceFormProps) {
       endDate: '',
       content: '',
     });
+    setStackForm([]);
+    setSelectedProjectStackIds([]);
+    setSelectedStackNames([]);
   };
 
   // 추가할 기술 스택 삭제 버튼 클릭 핸들러
-  const handleStackDeleteButtonClick = (stack: string) => {
-    setStackForm((prev) => prev.filter((item) => item !== stack)); // 선택한 스택 삭제
+  const handleStackDeleteButtonClick = (stack: Stack) => {
+    setStackForm((prev) => prev.filter((item) => item.id !== stack.id)); // 선택한 스택 삭제
   };
 
   // 삭제 버튼 클릭 핸들러
@@ -519,7 +537,7 @@ function ExperienceForm(props: ExperienceFormProps) {
   }, [isEditMode]);
 
   useEffect(() => {
-    if (currentTab === 'stack') {
+    if (currentTab) {
       fetchStackList().then((res) => {
         console.log('기술 스택 조회 성공', res);
         setStackOptions(res);
@@ -553,7 +571,11 @@ function ExperienceForm(props: ExperienceFormProps) {
                 key={`${project.name}-${idx}`}
                 label={project.label}
                 name={project.name}
-                value={projectForm[project.name as keyof typeof projectForm]}
+                value={
+                  projectForm[
+                    project.name as keyof typeof projectForm
+                  ] as string
+                }
                 placeholder={project.placeholder}
                 isDate={project.isDate}
                 onChange={(e) => {
@@ -573,6 +595,12 @@ function ExperienceForm(props: ExperienceFormProps) {
                         }));
                       }
                     : undefined
+                }
+                isStack={project.isStack}
+                stackOptions={stackOptions}
+                selectedStackIds={projectForm.stackIds}
+                onStackChange={(ids) =>
+                  setProjectForm((prev) => ({ ...prev, stackIds: ids }))
                 }
               />
             ))}

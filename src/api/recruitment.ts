@@ -2,11 +2,13 @@ import api from '../lib/axios';
 import { ApiResponse } from '../types/dev-experience.types';
 
 interface Stack {
-  stack: string;
-  required: boolean;
+  id: number;
+  name: string;
+  isRequired?: boolean;
 }
 
 export interface CompanyMatchingResultItem {
+  recruitmentId: number;
   companyName: string;
   position: string;
   finalScore: string;
@@ -48,7 +50,7 @@ export interface RecruitmentListContent {
   imageUrl: string;
   minCareer: number;
   maxCareer: number;
-  stacks: number[];
+  stacks: Stack[];
 }
 
 export interface RecruitmentList {

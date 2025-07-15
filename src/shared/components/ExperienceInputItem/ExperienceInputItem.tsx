@@ -2,6 +2,8 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import '../../../lib/react-datepicker/css/styles.css';
 import { ko } from 'date-fns/locale';
+import { Stack } from '../../../types/dev-experience.types';
+import StackSelector from '../../../components/StackSelector';
 
 interface ExperienceInputItemProps {
   label: string;
@@ -13,17 +15,32 @@ interface ExperienceInputItemProps {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
   onDateChange?: (date: Date | null) => void;
+  isStack?: boolean;
+  stackOptions?: Stack[];
+  selectedStackIds?: number[];
+  onStackChange?: (ids: number[]) => void;
 }
 
 function ExperienceInputItem(props: ExperienceInputItemProps) {
-  const { label, name, value, placeholder, isDate, onChange, onDateChange } =
-    props;
+  const {
+    label,
+    name,
+    value,
+    placeholder,
+    isStack,
+    isDate,
+    onChange,
+    onDateChange,
+    stackOptions,
+    selectedStackIds,
+    onStackChange,
+  } = props;
 
   return (
     <div className='flex w-full flex-col gap-1.25'>
       <span className='text-sm leading-4 font-medium'>{label}</span>
       <div
-        className={`flex ${name === 'content' ? 'h-28' : 'h-10'} w-full rounded-[5px] transition-all duration-300 ease-in-out focus-within:ring-1 focus-within:ring-[#2563EB]`}
+        className={`flex ${name === 'content' ? 'h-28' : 'h-10'} rounded-[5px] transition-all duration-300 ease-in-out focus-within:ring-1 focus-within:ring-[#2563EB]`}
         style={{ border: '1px solid #898989B2' }}
       >
         {isDate ? (
@@ -39,6 +56,12 @@ function ExperienceInputItem(props: ExperienceInputItemProps) {
             placeholderText={placeholder}
             className='text-main h-full w-full cursor-pointer bg-transparent px-3 text-sm outline-none'
             isClearable
+          />
+        ) : isStack ? (
+          <StackSelector
+            stackOptions={stackOptions || []}
+            selectedStackIds={selectedStackIds || []}
+            onChange={onStackChange || (() => {})}
           />
         ) : name === 'content' ? (
           <textarea
